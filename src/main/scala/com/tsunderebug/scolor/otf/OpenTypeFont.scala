@@ -15,22 +15,17 @@ class OpenTypeFont extends Font {
 
   private val offsets: mutable.Map[Data, Offset] = mutable.Map()
 
-  private val cmapData: mutable.Map[Seq[Codepoint], Glyph] = mutable.Map()
+  private val tableSeq: mutable.Seq[Table] = mutable.Seq()
 
-  def characterMap: Map[Seq[Codepoint], Glyph] = cmapData.toMap
-
-  def characterMapTable: OpenTypeCMAPTable = {
-    null
-  }
-
-  def tables: Seq[Table] = Seq()
+  def tables: Seq[Table] = tableSeq
 
   override def nextAvailableOffset(data: Data): Offset = {
     if(offsets.contains(data)) {
       offsets(data)
     } else {
       val (d: Data, o: Offset) = offsets.toSeq.maxBy(_._2.position.toLong)
-      val offset = Offset32((o.position + d.length).toLong)
+      val op = (o.position + d.length).toLong
+      val offset = Offset32(op + (4 - (op % 4)))
       offsets += (data -> offset)
       offset
     }
@@ -73,6 +68,15 @@ class OpenTypeFont extends Font {
     UInt(intBuf.array.sum)
   }
 
+  private def offsetMapToData(m: mutable.Map[Offset, Data]): mutable.Map[ULong, UByte] = {
+    m.map((t) => (ULong(t._1.position.toLong), t._2.getBytes(this))).flatMap { case (k, arr) => arr.zipWithIndex.map {case (v, idx) => (k + ULong(idx)) -> v }}
+  }
+
+  def clear(): Unit = {
+    buff.clear()
+    offsets.clear()
+  }
+
   override def getBytes: Array[Byte] = {
     val headerLen = 12 + (16 * tables.length)
     val headerData: mutable.Map[ULong, UByte] = mutable.Map()
@@ -88,7 +92,11 @@ class OpenTypeFont extends Font {
       queueMapBytes(headerData, Offset32((t._2 * 16) + 20), nextAvailableOffset(t._1).getBytes(this))
       queueMapBytes(headerData, Offset32((t._2 * 16) + 24), t._1.length)
     })
-    Array()
+    val totalData: mutable.Map[ULong, UByte] = headerData ++ offsetMapToData(offsets.map(_.swap).map((t) => (Offset32(t._1.position.toLong + headerLen), t._2)))
+    val largestOffset = totalData.maxBy(_._1)._1.toInt
+    val bb: ByteBuffer = ByteBuffer.allocate(largestOffset)
+    totalData.foreach((t) => bb.put(t._1.toInt, t._2.signed))
+    bb.array()
   }
 
 }
