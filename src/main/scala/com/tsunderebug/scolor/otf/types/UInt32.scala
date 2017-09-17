@@ -14,4 +14,6 @@ case class UInt32(value: UInt) extends SectionDataType {
     buffer.array().map(UByte(_))
   }
 
+  override def length = UInt(4)
+
 }

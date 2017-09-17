@@ -9,4 +9,6 @@ case class Offset32(offset: Long) extends Offset {
 
   override def getBytes(f: Font): Array[UByte] = UInt32(UInt(offset)).getBytes(f)
 
+  override def length = UInt(4)
+
 }

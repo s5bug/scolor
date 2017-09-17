@@ -4,7 +4,7 @@ import com.tsunderebug.scolor.table.SectionDataType
 import java.nio.ByteBuffer
 
 import com.tsunderebug.scolor.Font
-import spire.math.{UByte, UShort}
+import spire.math.{UByte, UInt, UShort}
 
 case class UInt16(value: UShort) extends SectionDataType {
 
@@ -13,5 +13,7 @@ case class UInt16(value: UShort) extends SectionDataType {
     buffer.putShort(value.toShort)
     buffer.array().map(UByte(_))
   }
+
+  override def length: UInt = UInt(2)
 
 }

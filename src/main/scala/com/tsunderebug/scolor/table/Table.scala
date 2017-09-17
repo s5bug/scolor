@@ -1,9 +1,9 @@
 package com.tsunderebug.scolor.table
 
-import com.tsunderebug.scolor.Font
+import com.tsunderebug.scolor.{Data, Font}
 import spire.math.UByte
 
-trait Table {
+trait Table extends Data {
 
   def name: String
   def sections: Seq[Section]

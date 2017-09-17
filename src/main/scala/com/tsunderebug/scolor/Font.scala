@@ -1,12 +1,11 @@
 package com.tsunderebug.scolor
 
-import com.tsunderebug.scolor.table.Table
-import spire.math.UInt
+import spire.math.UByte
 
 trait Font {
 
-  def characterMap: Map[Seq[Codepoint], Glyph]
-  def characterMapTable: Table
-  def nextAvailableOffset(dataLen: UInt): Offset
+  def queueBytes(o: Offset, b: Array[UByte])
+  def nextAvailableOffset(data: Data): Offset
+  def getBytes: Array[Byte]
 
 }
