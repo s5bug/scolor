@@ -1,11 +1,11 @@
 package com.tsunderebug.scolor
 
-import spire.math.UByte
+import java.io.File
 
 trait Font {
 
-  def queueBytes(o: Offset, b: Array[UByte])
-  def nextAvailableOffset(data: Data): Offset
   def getBytes: Array[Byte]
+  def writeFile(dir: File, name: String): Unit
+  def nextAvailableOffset(d: Data): Offset
 
 }

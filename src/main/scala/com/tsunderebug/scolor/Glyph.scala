@@ -1,5 +1,3 @@
 package com.tsunderebug.scolor
 
-trait Glyph {
-
-}
+trait Glyph extends Data
