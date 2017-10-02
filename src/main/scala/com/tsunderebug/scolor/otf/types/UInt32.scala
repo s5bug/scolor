@@ -1,7 +1,5 @@
 package com.tsunderebug.scolor.otf.types
 
-import java.nio.ByteBuffer
-
 import com.tsunderebug.scolor.Font
 import com.tsunderebug.scolor.table.SectionDataType
 import spire.math.{UByte, UInt}
@@ -9,9 +7,7 @@ import spire.math.{UByte, UInt}
 case class UInt32(value: UInt) extends SectionDataType {
 
   override def getBytes(f: Font): Array[UByte] = {
-    val buffer = ByteBuffer.allocate(4)
-    buffer.putInt(value.toInt)
-    buffer.array().map(UByte(_))
+    Array(((value.toInt & 0xFF000000) >> 24).toByte, ((value.toInt & 0x00FF0000) >> 16).toByte, ((value.toInt & 0x0000FF00) >> 8).toByte, (value.toInt & 0x000000FF).toByte).map(UByte(_))
   }
 
   override def length = UInt(4)
@@ -22,6 +18,6 @@ case class UInt32(value: UInt) extends SectionDataType {
     * @param f The font
     * @return an array of Data objects
     */
-  override def data(f: Font) = Array()
+  override def getData(f: Font) = Array()
 
 }

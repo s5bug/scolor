@@ -23,6 +23,6 @@ class OpenTypeNAMETable extends Table {
     * @param f The font
     * @return an array of Data objects
     */
-  override def data(f: Font): Array[Data] = Array()
+  override def getData(f: Font): Array[Data] = Array()
 
 }

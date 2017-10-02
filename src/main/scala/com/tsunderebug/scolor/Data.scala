@@ -12,6 +12,6 @@ trait Data {
     * @param f The font
     * @return an array of Data objects
     */
-  def data(f: Font): Array[Data]
+  def getData(f: Font): Array[Data]
 
 }

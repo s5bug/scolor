@@ -10,12 +10,12 @@ case class EncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat
   override def sections(f: Font) = Seq(
     Section("platformID", UInt16(platformID)),
     Section("encodingID", UInt16(encodingID)),
-    Section("offset", f.allocate(data(f)(0)))
+    Section("offset", f.allocate(getData(f)(0)))
   )
 
   override def length = UInt(8)
 
-  override def data(f: Font): Array[Data] = Array(encodingFormat)
+  override def getData(f: Font): Array[Data] = Array(encodingFormat)
 
 }
 

@@ -20,8 +20,9 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
   private val tableOffsMap: mutable.Map[Table, Offset] = mutable.Map()
 
   writeHeader()
+  writeData()
 
-  def writeHeader(): Unit = {
+  private def writeHeader(): Unit = {
     def mPow2Shifts(i: Int): Int = {
       var shifts = 0
       while ((i & (Int.MaxValue << shifts)) != 0) {
@@ -55,6 +56,12 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
     insert(Offset32(0), buff.toArray)
   }
 
+  private def writeData(): Unit = {
+    tableOffsMap.foreach((t) => {
+      insert(t._1)
+    })
+  }
+
   override protected[scolor] def allocate(data: Data): Offset = {
     allocMap.getOrElseUpdate(data, allocate(data.length))
   }
@@ -68,8 +75,9 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
   override protected[scolor] def insert(offset: Offset, data: Data): Unit = {
     val bytes = data.getBytes(this)
     val top = offset.position.toInt + bytes.length
-    (offset.position.toInt until top).foreach((p) => byteMap += (Offset32(p) -> bytes(p)))
+    (offset.position.toInt until top).foreach((p) => byteMap += (Offset32(p) -> bytes(p - offset.position.toInt)))
     nextAvailableOffset = Offset32(top + (4 - (top % 4)))
+    data.getData(this).foreach(insert)
   }
 
   override def getBytes: Array[UByte] = {
@@ -143,7 +151,7 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
       * @param f The font
       * @return an array of Data objects
       */
-    override def data(f: Font): Array[Data] = Array()
+    override def getData(f: Font): Array[Data] = Array()
 
     override def length: UInt = UInt(b.length)
 

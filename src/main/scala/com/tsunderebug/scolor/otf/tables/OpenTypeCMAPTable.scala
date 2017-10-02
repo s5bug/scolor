@@ -28,6 +28,6 @@ case class OpenTypeCMAPTable(
     * @param f The font
     * @return an array of Data objects
     */
-  override def data(f: Font) = Array()
+  override def getData(f: Font) = Array()
 
 }

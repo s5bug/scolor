@@ -17,6 +17,6 @@ case class Offset32(offset: Long) extends Offset {
     * @param f The font
     * @return an array of Data objects
     */
-  override def data(f: Font) = Array()
+  override def getData(f: Font) = Array()
 
 }
