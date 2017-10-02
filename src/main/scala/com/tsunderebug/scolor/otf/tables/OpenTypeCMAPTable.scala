@@ -5,7 +5,7 @@ import com.tsunderebug.scolor.otf.types.{EncodingRecord, UInt16}
 import com.tsunderebug.scolor.table.{Section, Table}
 import spire.math.{UByte, UInt, UShort}
 
-class OpenTypeCMAPTable(
+case class OpenTypeCMAPTable(
                        encodingRecords: Seq[EncodingRecord]
                        ) extends Table {
 
@@ -28,5 +28,6 @@ class OpenTypeCMAPTable(
     * @param f The font
     * @return an array of Data objects
     */
-  override def data(f: Font) = ???
+  override def data(f: Font) = Array()
+
 }

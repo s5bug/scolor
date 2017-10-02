@@ -113,7 +113,8 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
 
     def checksum: UInt = {
       val intBuf = ByteBuffer.wrap(bytes.map(_.signed)).order(ByteOrder.BIG_ENDIAN).asIntBuffer
-      intBuf.array.map(UInt(_)).qsum
+      val ints = (bytes.length + 3) / 4
+      (0 until ints).map((i) => UInt(intBuf.get(i))).toArray.qsum
     }
 
   }
