@@ -16,4 +16,12 @@ case class UInt32(value: UInt) extends SectionDataType {
 
   override def length = UInt(4)
 
+  /**
+    * Gets data sections if this data block has offsets
+    *
+    * @param f The font
+    * @return an array of Data objects
+    */
+  override def data(f: Font) = Array()
+
 }

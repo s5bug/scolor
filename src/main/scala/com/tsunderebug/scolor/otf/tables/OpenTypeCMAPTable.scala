@@ -22,4 +22,11 @@ class OpenTypeCMAPTable(
     UInt(sections.map(_.data.length.toLong).sum)
   }
 
+  /**
+    * Gets data sections if this data block has offsets
+    *
+    * @param f The font
+    * @return an array of Data objects
+    */
+  override def data(f: Font) = ???
 }

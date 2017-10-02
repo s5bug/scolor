@@ -2,10 +2,24 @@ package com.tsunderebug.scolor
 
 import java.io.File
 
-trait Font {
+import spire.math.{UByte, UInt}
 
-  def getBytes: Array[Byte]
+abstract class Font {
+
+  def getBytes: Array[UByte]
+  protected[scolor] def insert(data: Data): Unit = {
+    insert(allocate(data), data)
+  }
+  protected[scolor] def insert(offset: Offset, data: Data)
+  protected[scolor] def allocate(data: Data): Offset
+
+  /**
+    * This should cache.
+    * @param numBytes The number of bytes to allocate
+    * @return The starting offset of the data
+    */
+  protected[scolor] def allocate(numBytes: UInt): Offset
   def writeFile(dir: File, name: String): Unit
-  def nextAvailableOffset(d: Data): Offset
+  protected[scolor] def nextOffset: Offset
 
 }

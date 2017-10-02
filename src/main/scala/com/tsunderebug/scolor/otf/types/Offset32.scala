@@ -11,4 +11,12 @@ case class Offset32(offset: Long) extends Offset {
 
   override def length = UInt(4)
 
+  /**
+    * Gets data sections if this data block has offsets
+    *
+    * @param f The font
+    * @return an array of Data objects
+    */
+  override def data(f: Font) = Array()
+
 }
