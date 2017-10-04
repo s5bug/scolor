@@ -12,6 +12,7 @@ abstract class Font {
   }
   protected[scolor] def insert(offset: Offset, data: Data)
   protected[scolor] def allocate(data: Data): Offset
+  protected[scolor] def allocate(data: Data, numBytes: UInt): Offset
 
   /**
     * This should cache.

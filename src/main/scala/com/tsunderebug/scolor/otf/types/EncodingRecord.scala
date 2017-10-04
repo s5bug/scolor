@@ -13,7 +13,7 @@ case class EncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat
     Section("offset", f.allocate(getData(f)(0)))
   )
 
-  override def length = UInt(8)
+  override def length(f: Font) = UInt(8)
 
   override def getData(f: Font): Array[Data] = Array(encodingFormat)
 

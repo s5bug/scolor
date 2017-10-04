@@ -1,12 +1,12 @@
 package com.tsunderebug.scolor.table
 
-import com.tsunderebug.scolor.{Data, Font}
+import com.tsunderebug.scolor.Font
 import spire.math.UByte
 
-trait Table extends Data {
+trait Table extends EnclosingSectionDataType {
 
   def name: String
-  def sections: Seq[Section]
+  def sections(f: Font): Seq[Section]
 
   /**
     * The bytes of table data. The data does not have to be padded.

@@ -51,7 +51,7 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
       val bytes = t.getBytes(this)
       buff ++= bytes.checksum.bytes
       buff ++= dataOffset.position.bytes
-      buff ++= t.length.bytes
+      buff ++= t.length(this).bytes
     })
     insert(Offset32(0), buff.toArray)
   }
@@ -63,7 +63,11 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
   }
 
   override protected[scolor] def allocate(data: Data): Offset = {
-    allocMap.getOrElseUpdate(data, allocate(data.length))
+    allocMap.getOrElseUpdate(data, allocate(data.length(this)))
+  }
+
+  override protected[scolor] def allocate(data: Data, numBytes: UInt): Offset = {
+    allocMap.getOrElseUpdate(data, allocate(numBytes))
   }
 
   override protected[scolor] def allocate(numBytes: UInt): Offset = {
@@ -121,7 +125,7 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
 
     def checksum: UInt = {
       val intBuf = ByteBuffer.wrap(bytes.map(_.signed)).order(ByteOrder.BIG_ENDIAN).asIntBuffer
-      val ints = (bytes.length + 3) / 4
+      val ints = (bytes.length + 3) / 4 - 1
       (0 until ints).map((i) => UInt(intBuf.get(i))).toArray.qsum
     }
 
@@ -153,7 +157,7 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
       */
     override def getData(f: Font): Array[Data] = Array()
 
-    override def length: UInt = UInt(b.length)
+    override def length(f: Font): UInt = UInt(b.length)
 
     override def getBytes(f: Font): Array[UByte] = b
 

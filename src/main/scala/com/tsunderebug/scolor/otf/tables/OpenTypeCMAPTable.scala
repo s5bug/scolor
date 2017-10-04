@@ -2,24 +2,22 @@ package com.tsunderebug.scolor.otf.tables
 
 import com.tsunderebug.scolor.Font
 import com.tsunderebug.scolor.otf.types.{EncodingRecord, UInt16}
-import com.tsunderebug.scolor.table.{Section, Table}
-import spire.math.{UByte, UInt, UShort}
+import com.tsunderebug.scolor.table.Section
+import spire.math.{UInt, UShort}
 
 case class OpenTypeCMAPTable(
                        encodingRecords: Seq[EncodingRecord]
-                       ) extends Table {
+                       ) extends OpenTypeTable {
 
   override def name = "cmap"
 
-  override def sections: Seq[Section] = Seq(
+  override def sections(f: Font): Seq[Section] = Seq(
     Section("version", UInt16(UShort(0))),
     Section("numTables", UInt16(UShort(encodingRecords.length))) // TODO CMAP encoding class
   )
 
-  override def getBytes(f: Font): Array[UByte] = sections.flatMap(_.getBytes(f)).toArray
-
-  override def length: UInt = {
-    UInt(sections.map(_.data.length.toLong).sum)
+  override def length(f: Font): UInt = {
+    UInt(sections(f).map(_.data.length(f).toLong).sum)
   }
 
   /**

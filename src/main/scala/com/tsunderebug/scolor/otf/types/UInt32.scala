@@ -10,7 +10,7 @@ case class UInt32(value: UInt) extends SectionDataType {
     Array(((value.toInt & 0xFF000000) >> 24).toByte, ((value.toInt & 0x00FF0000) >> 16).toByte, ((value.toInt & 0x0000FF00) >> 8).toByte, (value.toInt & 0x000000FF).toByte).map(UByte(_))
   }
 
-  override def length = UInt(4)
+  override def length(f: Font) = UInt(4)
 
   /**
     * Gets data sections if this data block has offsets

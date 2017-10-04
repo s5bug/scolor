@@ -1,21 +1,32 @@
 package com.tsunderebug.scolor.otf.tables
 
+import com.tsunderebug.scolor.otf.types._
+import com.tsunderebug.scolor.table.Section
 import com.tsunderebug.scolor.{Data, Font}
-import com.tsunderebug.scolor.otf.types.UInt16
-import com.tsunderebug.scolor.table.{Section, Table}
-import spire.math.UShort
+import spire.math.{UInt, UShort}
+import spire.syntax.std.array._
 
-class OpenTypeNAMETable extends Table {
+case class OpenTypeNAMETable(
+                            records: Seq[NameRecord]
+                            ) extends OpenTypeTable {
 
   override def name = "name"
 
-  override def sections = Seq(
-    Section("format", UInt16(UShort(0)))
-  )
+  val strData = OTFString(records.map(_.data.s).mkString)
 
-  override def getBytes(f: Font) = ???
+  override def sections(f: Font): Seq[Section] = {
+    val off = f.allocate(this)
+    val dataOff = off.position + UInt(6) + records.map(_.apply(this).length(f)).toArray.qsum
+    Seq(
+      Section("format", UInt16(UShort(0))),
+      Section("count", UInt16(UShort(records.length))),
+      Section("stringOffset", Offset16(6 + records.map(_.apply(this).length(f)).toArray.qsum.toInt)),
+      Section("nameRecords", OTFArray(records.map(_.apply(this)))),
+      Section("data", strData)
+    )
+  }
 
-  override def length = ???
+  override def length(f: Font): UInt = UInt(6) + records.map(_.apply(this).length(f)).toArray.qsum + strData.length(f)
 
   /**
     * Gets data sections if this data block has offsets
