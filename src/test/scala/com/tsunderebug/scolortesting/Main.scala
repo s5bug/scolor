@@ -18,7 +18,7 @@ object Main {
           )
         )
       )
-    ).getBytes.map(_.toInt.toHexString).mkString(" "))
+    ).getBytes.map((b) => "%02x".format(b.toInt)).grouped(16).map(_.mkString(" ")).mkString("\n"))
   }
 
 }
