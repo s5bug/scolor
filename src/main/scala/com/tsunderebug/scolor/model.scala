@@ -1,11 +1,10 @@
-package com.tsunderebug.scolor {
+package com.tsunderebug.scolor
 
-  object Models {
+object Models {
 
-    import spire.math.UInt
+  import spire.math.UInt
 
-    type Codepoint = UInt
-
-  }
+  type Codepoint = UInt
 
 }
+
