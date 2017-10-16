@@ -57,6 +57,17 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
     })
   }
 
+  /** Writes bytes to a file without leaving resources open on failure */
+  private def safeCreateAndWrite(file: File, uBytes: => Array[UByte]) = {
+    file.createNewFile()
+    val fileOutputStream = new FileOutputStream(file, false)
+    try {
+      fileOutputStream.write(uBytes.map(_.toByte))
+    } finally {
+      fileOutputStream.close()
+    }
+  }
+
   override def writeFile(dir: File, name: String): Unit = {
     dir.mkdirs()
     val `Windows Font Tables` = tables.filter((t) => !Seq("sbix", "cbdt", "cblc").contains(t.name.toLowerCase))
@@ -65,26 +76,10 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
     val winFont = OpenTypeFont(`Windows Font Tables`)
     val macFont = OpenTypeFont(`Mac Font Tables`)
     val nixFont = OpenTypeFont(`Linux Font Tables`)
-    val allFile = new File(dir, name + ".otf")
-    val winFile = new File(dir, name + "-win.otf")
-    val macFile = new File(dir, name + "-mac.otf")
-    val nixFile = new File(dir, name + "-nix.otf")
-    allFile.createNewFile()
-    winFile.createNewFile()
-    macFile.createNewFile()
-    nixFile.createNewFile()
-    val allOS: FileOutputStream = new FileOutputStream(allFile, false)
-    val winOS: FileOutputStream = new FileOutputStream(winFile, false)
-    val macOS: FileOutputStream = new FileOutputStream(macFile, false)
-    val nixOS: FileOutputStream = new FileOutputStream(nixFile, false)
-    allOS.write(getBytes.map(_.toByte))
-    winOS.write(winFont.getBytes.map(_.toByte))
-    macOS.write(macFont.getBytes.map(_.toByte))
-    nixOS.write(nixFont.getBytes.map(_.toByte))
-    allOS.close()
-    winOS.close()
-    macOS.close()
-    nixOS.close()
+    safeCreateAndWrite(new File(dir, name + ".otf"), getBytes)
+    safeCreateAndWrite(new File(dir, name + "-win.otf"), winFont.getBytes)
+    safeCreateAndWrite(new File(dir, name + "-mac.otf"), macFont.getBytes)
+    safeCreateAndWrite(new File(dir, name + "-nix.otf"), nixFont.getBytes)
   }
 
   implicit class OpenTypeTable(bytes: Array[UByte]) {
