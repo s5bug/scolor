@@ -1,22 +1,22 @@
 package com.tsunderebug.scolor.otf.types
 
-import com.tsunderebug.scolor.{Font, Offset}
+import com.tsunderebug.scolor.{ByteAllocator, Offset}
 import spire.math.{UByte, UInt, UShort}
 
 case class Offset16(offset: Int) extends Offset {
 
   override def position: UInt = UInt(offset)
 
-  override def getBytes(f: Font): Array[UByte] = UInt16(UShort(offset)).getBytes(f)
+  override def getBytes(b: ByteAllocator): Array[UByte] = UInt16(UShort(offset)).getBytes(b)
 
-  override def length(f: Font) = UInt(2)
+  override def length(b: ByteAllocator) = UInt(2)
 
   /**
     * Gets data sections if this data block has offsets
     *
-    * @param f The font
+    * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(f: Font) = Array()
+  override def getData(b: ByteAllocator) = Seq()
 
 }

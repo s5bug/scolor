@@ -1,10 +1,10 @@
 package com.tsunderebug.scolor.table
 
-import com.tsunderebug.scolor.{Data, Font}
+import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.UByte
 
 trait SectionDataType extends Data {
 
-  def getBytes(f: Font): Array[UByte]
+  def getBytes(b: ByteAllocator): Array[UByte]
 
 }

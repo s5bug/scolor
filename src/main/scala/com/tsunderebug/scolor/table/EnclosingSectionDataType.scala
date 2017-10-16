@@ -1,12 +1,12 @@
 package com.tsunderebug.scolor.table
 
-import com.tsunderebug.scolor.Font
+import com.tsunderebug.scolor.{ByteAllocator, Font}
 import spire.math.UByte
 
 abstract class EnclosingSectionDataType extends SectionDataType {
 
-  def sections(f: Font): Seq[Section]
+  def sections(b: ByteAllocator): Seq[Section]
 
-  override def getBytes(f: Font): Array[UByte] = sections(f).flatMap(_.getBytes(f)).toArray
+  override def getBytes(b: ByteAllocator): Array[UByte] = sections(b).flatMap(_.getBytes(b)).toArray
 
 }

@@ -4,14 +4,14 @@ import spire.math.{UByte, UInt}
 
 trait Data {
 
-  def length(f: Font): UInt
-  def getBytes(f: Font): Array[UByte]
+  def length(b: ByteAllocator): UInt
+  def getBytes(b: ByteAllocator): Array[UByte]
 
   /**
     * Gets data sections if this data block has offsets
-    * @param f The font
+    * @param b The byte allocator
     * @return an array of Data objects
     */
-  def getData(f: Font): Array[Data]
+  def getData(b: ByteAllocator): Seq[Data]
 
 }

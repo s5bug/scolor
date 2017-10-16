@@ -14,15 +14,10 @@ import scala.collection.mutable.ListBuffer
 
 case class OpenTypeFont(tables: Seq[Table]) extends Font {
 
-  private var nextAvailableOffset: Offset = Offset32(0)
   private val byteMap: mutable.Map[Offset, UByte] = mutable.Map()
-  private val allocMap: mutable.Map[Data, Offset] = mutable.Map()
   private val tableOffsMap: mutable.Map[Table, Offset] = mutable.Map()
 
-  writeHeader()
-  writeData()
-
-  private def writeHeader(): Unit = {
+  def writeHeader(b: ByteAllocator): Unit = {
     def mPow2Shifts(i: Int): Int = {
       var shifts = 0
       while ((i & (Int.MaxValue << shifts)) != 0) {
@@ -35,7 +30,7 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
       1 << (mPow2Shifts(i) - 1)
     }
 
-    allocate(UInt(12))
+    b.allocate(UInt(12))
     val buff = ListBuffer[UByte]()
     buff ++= "OTTO".getBytes.map(UByte(_))
     buff ++= UShort(tables.size).bytes
@@ -43,50 +38,23 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
     buff ++= UShort(searchRange).bytes
     buff ++= UShort(mPow2Shifts(tables.size)).bytes
     buff ++= UShort(tables.size * 16 - searchRange).bytes
-    allocate(UInt(tables.length * 16))
+    b.allocate(UInt(tables.length * 16))
     tables.foreach((t) => {
       buff ++= t.name.getBytes.map(UByte(_))
-      val dataOffset = allocate(t)
+      val dataOffset = b.allocate(t)
       tableOffsMap += (t -> dataOffset)
-      val bytes = t.getBytes(this)
+      val bytes = t.getBytes(b)
       buff ++= bytes.checksum.bytes
       buff ++= dataOffset.position.bytes
-      buff ++= t.length(this).bytes
+      buff ++= t.length(b).bytes
     })
-    insert(Offset32(0), buff.toArray)
+    b.insert(Offset32(0), buff.toArray)
   }
 
-  private def writeData(): Unit = {
+  def writeTables(b: ByteAllocator): Unit = {
     tableOffsMap.foreach((t) => {
-      insert(t._1)
+      b.insert(t._1)
     })
-  }
-
-  override protected[scolor] def allocate(data: Data): Offset = {
-    allocMap.getOrElseUpdate(data, allocate(data.length(this)))
-  }
-
-  override protected[scolor] def allocate(data: Data, numBytes: UInt): Offset = {
-    allocMap.getOrElseUpdate(data, allocate(numBytes))
-  }
-
-  override protected[scolor] def allocate(numBytes: UInt): Offset = {
-    val prev = nextOffset
-    nextAvailableOffset = Offset32((prev.position + numBytes).toLong)
-    prev
-  }
-
-  override protected[scolor] def insert(offset: Offset, data: Data): Unit = {
-    val bytes = data.getBytes(this)
-    val top = offset.position.toInt + bytes.length
-    (offset.position.toInt until top).foreach((p) => byteMap += (Offset32(p) -> bytes(p - offset.position.toInt)))
-    nextAvailableOffset = Offset32(top + (4 - (top % 4)))
-    data.getData(this).foreach(insert)
-  }
-
-  override def getBytes: Array[UByte] = {
-    val m: Int = byteMap.map((t) => t._1.position.toInt).max
-    (0 to m).map((i) => byteMap.getOrElse(Offset32(i), UByte(0))).toArray
   }
 
   override def writeFile(dir: File, name: String): Unit = {
@@ -119,8 +87,6 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
     nixOS.close()
   }
 
-  override protected[scolor] def nextOffset: Offset = nextAvailableOffset
-
   implicit class OpenTypeTable(bytes: Array[UByte]) {
 
     def checksum: UInt = {
@@ -147,20 +113,27 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
 
   }
 
-  implicit def byteArrayToData(b: Array[UByte]): Data = new Data {
+  implicit def byteArrayToData(ba: Array[UByte]): Data = new Data {
 
     /**
       * Gets data sections if this data block has offsets
       *
-      * @param f The font
+      * @param b The byte allocator
       * @return an array of Data objects
       */
-    override def getData(f: Font): Array[Data] = Array()
+    override def getData(b: ByteAllocator): Seq[Data] = Seq()
 
-    override def length(f: Font): UInt = UInt(b.length)
+    override def length(b: ByteAllocator): UInt = UInt(ba.length)
 
-    override def getBytes(f: Font): Array[UByte] = b
+    override def getBytes(b: ByteAllocator): Array[UByte] = ba
 
+  }
+
+  override def getBytes: Array[UByte] = {
+    val b: ByteAllocator = new OTFByteAllocator(this)
+    writeHeader(b)
+    writeTables(b)
+    b.getBytes
   }
 
 }

@@ -1,22 +1,22 @@
 package com.tsunderebug.scolor.otf.types
 
 import com.tsunderebug.scolor.table.SectionDataType
-import com.tsunderebug.scolor.{Data, Font}
+import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UByte, UInt}
 import spire.syntax.std.array._
 
 case class OTFArray[T <: Data](elems: Seq[T]) extends SectionDataType {
 
-  override def length(f: Font): UInt = elems.map(_.length(f)).toArray.qsum
+  override def length(b: ByteAllocator): UInt = elems.map(_.length(b)).toArray.qsum
 
-  override def getBytes(f: Font): Array[UByte] = elems.flatMap(_.getBytes(f)).toArray
+  override def getBytes(b: ByteAllocator): Array[UByte] = elems.flatMap(_.getBytes(b)).toArray
 
   /**
     * Gets data sections if this data block has offsets
     *
-    * @param f The font
+    * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(f: Font): Array[Data] = Array()
+  override def getData(b: ByteAllocator): Seq[Data] = Seq()
 
 }
