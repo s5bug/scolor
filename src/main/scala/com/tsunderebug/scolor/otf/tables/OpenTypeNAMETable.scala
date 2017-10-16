@@ -12,7 +12,7 @@ case class OpenTypeNAMETable(
 
   override def name = "name"
 
-  val strData = OTFString(records.map(_.data.s).mkString)
+  val strData = OTFArray(records.map((r) => OTFString(r.data.s)))
   private val tabeledRecords = records.map(_(this))
 
   override def sections(b: ByteAllocator): Seq[Section] = {
