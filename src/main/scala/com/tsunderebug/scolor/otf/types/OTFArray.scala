@@ -8,15 +8,15 @@ import spire.syntax.std.array._
 case class OTFArray[T <: Data](elems: Seq[T]) extends SectionDataType {
 
   override def length(b: ByteAllocator): UInt = {
-  	elems.foldLeft(UInt(0)) {
-  		case (accum, elem) => accum + elem.length(b)
-  	}
+    elems.foldLeft(UInt(0)) {
+      case (accum, elem) => accum + elem.length(b)
+    }
   }
 
   override def getBytes(b: ByteAllocator): Array[UByte] = {
-  	elems.foldLeft(Array.empty[UByte]) {
-  		case (accum, elem) => accum ++ elem.getBytes(b)
-  	}
+    elems.foldLeft(Array.empty[UByte]) {
+      case (accum, elem) => accum ++ elem.getBytes(b)
+    }
   }
 
   /**
