@@ -17,11 +17,14 @@ case class OpenTypeNAMETable(
 
   override def sections(b: ByteAllocator): Seq[Section] = {
     val off = b.allocate(this)
-    val dataOff = off.position + UInt(6) + tabeledRecords.map(_.length(b)).toArray.qsum
+    val tabeledRecordsSum = tabeledRecords.foldLeft(UInt(0)) {
+      case (accum, tabledRecord) => accum + tabledRecord.length(b)
+    }
+    val dataOff = off.position + UInt(6) + tabeledRecordsSum
     Seq(
       Section("format", UInt16(UShort(0))),
       Section("count", UInt16(UShort(records.length))),
-      Section("stringOffset", Offset16(6 + tabeledRecords.map(_.length(b)).toArray.qsum.toInt)),
+      Section("stringOffset", Offset16(6 + tabeledRecordsSum.toInt)),
       Section("nameRecords", OTFArray(tabeledRecords)),
       Section("data", strData)
     )
