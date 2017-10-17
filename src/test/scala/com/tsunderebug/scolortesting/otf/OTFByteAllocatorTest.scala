@@ -18,23 +18,24 @@ class OTFByteAllocatorTest extends FlatSpec with PrivateMethodTester {
 
     val nextOffset = otfByteAllocator invokePrivate nextAvailableOffset()
     assertResult(UInt(10))(nextOffset.position)
+    assertResult(OTFOffset32(10))(nextOffset)
   }
 
   it should "return an offset describing the next open space these bytes can fit" in {
     val otfByteAllocator = new OTFByteAllocator(OpenTypeFont(Nil))    
     
     /* first we expect 0 */
-    assertResult(OTFOffset32(0)) {
-      otfByteAllocator.allocate(UInt(10))
-    }
+    val firstOffset = otfByteAllocator.allocate(UInt(10))
+    assertResult(OTFOffset32(0))(firstOffset)
+    assertResult(UInt(0))(firstOffset.position)
 
     /* but after we allocate 10 above, we'll expect to be told we can allocate our
      * next set of bytes to the 10th position (which is 1 higher than our previous
      * allocation since we're 0-based)
      */
-    assertResult(OTFOffset32(10)) {
-      otfByteAllocator.allocate(UInt(6))
-    }
+    val secondOffset = otfByteAllocator.allocate(UInt(6))
+    assertResult(OTFOffset32(10))(secondOffset)
+    assertResult(UInt(10))(secondOffset.position)
   }
   
 }
