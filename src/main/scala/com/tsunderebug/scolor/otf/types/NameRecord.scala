@@ -53,4 +53,8 @@ object NameRecord {
 
   def apply(nameID: UShort = UShort(4), d: WindowsLanguage.Dialect, content: OTFString): NameRecord = NameRecord(UShort(3), UShort(1), d.i, nameID, content)
 
+  // This is a workaround for scala not liking default overloads :/
+  def apply(script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(UShort(1), script, language, UShort(4), content)
+  def apply(nameID: UShort, script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(UShort(1), script, language, nameID, content)
+
 }
