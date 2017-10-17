@@ -1,7 +1,7 @@
 package com.tsunderebug.scolor.otf.types
 
 import com.tsunderebug.scolor.otf.tables.OpenTypeNAMETable
-import com.tsunderebug.scolor.otf.types.gen.WindowsLanguage
+import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
 import com.tsunderebug.scolor.table._
 import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
@@ -54,7 +54,9 @@ object NameRecord {
   def apply(nameID: UShort = UShort(4), d: WindowsLanguage.Dialect, content: OTFString): NameRecord = NameRecord(UShort(3), UShort(1), d.i, nameID, content)
 
   // This is a workaround for scala not liking default overloads :/
-  def apply(script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(UShort(1), script, language, UShort(4), content)
+  def apply(script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(script, language, UShort(4), content)
   def apply(nameID: UShort, script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(UShort(1), script, language, nameID, content)
+  def apply(d: MacLanguage, content: OTFString): NameRecord = NameRecord(d.script, d.language, UShort(4), content)
+  def apply(nameID: UShort, d: MacLanguage, content: OTFString): NameRecord = NameRecord(nameID, d.script, d.language, UShort(4), content)
 
 }
