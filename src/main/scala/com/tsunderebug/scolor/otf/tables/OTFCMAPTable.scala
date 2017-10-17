@@ -1,12 +1,12 @@
 package com.tsunderebug.scolor.otf.tables
 
 import com.tsunderebug.scolor.ByteAllocator
-import com.tsunderebug.scolor.otf.types.{EncodingRecord, OTFArray, TabledEncodingRecord, OTFUInt16}
+import com.tsunderebug.scolor.otf.types.{OTFEncodingRecord, OTFArray, TabledEncodingRecord, OTFUInt16}
 import com.tsunderebug.scolor.table.Section
 import spire.math.{UInt, UShort}
 
 case class OTFCMAPTable(
-                       encodingRecords: Seq[EncodingRecord]
+                       encodingRecords: Seq[OTFEncodingRecord]
                        ) extends OpenTypeTable {
 
   override def name = "cmap"

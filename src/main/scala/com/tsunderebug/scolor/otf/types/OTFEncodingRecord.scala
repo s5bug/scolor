@@ -1,7 +1,7 @@
 package com.tsunderebug.scolor.otf.types
 
 import com.tsunderebug.scolor.otf.tables.OTFCMAPTable
-import com.tsunderebug.scolor.otf.types.EncodingRecord.EncodingFormat
+import com.tsunderebug.scolor.otf.types.OTFEncodingRecord.EncodingFormat
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, RequireTable, Section}
 import com.tsunderebug.scolor._
 import spire.math.{UByte, UInt, UShort}
@@ -20,13 +20,13 @@ private[scolor] class TabledEncodingRecord(platformID: UShort, encodingID: UShor
 
 }
 
-case class EncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat) extends RequireTable[OTFCMAPTable, TabledEncodingRecord] {
+case class OTFEncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat) extends RequireTable[OTFCMAPTable, TabledEncodingRecord] {
 
   override def apply(t: OTFCMAPTable): TabledEncodingRecord = new TabledEncodingRecord(platformID, encodingID, encodingFormat, t)
 
 }
 
-object EncodingRecord {
+object OTFEncodingRecord {
 
   trait EncodingFormat extends EnclosingSectionDataType {
 

@@ -37,7 +37,7 @@ private[scolor] class TabledNameRecord(
 
 }
 
-case class NameRecord(
+case class OTFNameRecord(
                        platformID: UShort,
                        encodingID: UShort,
                        languageID: UShort,
@@ -49,14 +49,14 @@ case class NameRecord(
 
 }
 
-object NameRecord {
+object OTFNameRecord {
 
-  def apply(nameID: UShort = UShort(4), d: WindowsLanguage.Dialect, content: OTFString): NameRecord = NameRecord(UShort(3), UShort(1), d.i, nameID, content)
+  def apply(nameID: UShort = UShort(4), d: WindowsLanguage.Dialect, content: OTFString): OTFNameRecord = OTFNameRecord(UShort(3), UShort(1), d.i, nameID, content)
 
   // This is a workaround for scala not liking default overloads :/
-  def apply(script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(script, language, UShort(4), content)
-  def apply(nameID: UShort, script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(UShort(1), script, language, nameID, content)
-  def apply(d: MacLanguage, content: OTFString): NameRecord = NameRecord(d.script, d.language, UShort(4), content)
-  def apply(nameID: UShort, d: MacLanguage, content: OTFString): NameRecord = NameRecord(nameID, d.script, d.language, UShort(4), content)
+  def apply(script: UShort, language: UShort, content: OTFString): OTFNameRecord = OTFNameRecord(script, language, UShort(4), content)
+  def apply(nameID: UShort, script: UShort, language: UShort, content: OTFString): OTFNameRecord = OTFNameRecord(UShort(1), script, language, nameID, content)
+  def apply(d: MacLanguage, content: OTFString): OTFNameRecord = OTFNameRecord(d.script, d.language, UShort(4), content)
+  def apply(nameID: UShort, d: MacLanguage, content: OTFString): OTFNameRecord = OTFNameRecord(nameID, d.script, d.language, UShort(4), content)
 
 }

@@ -7,7 +7,7 @@ import spire.math.{UInt, UShort}
 import spire.syntax.std.array._
 
 case class OTFNAMETable(
-                            records: Seq[NameRecord]
+                            records: Seq[OTFNameRecord]
                             ) extends OpenTypeTable {
 
   override def name = "name"
