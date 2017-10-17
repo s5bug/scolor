@@ -30,7 +30,11 @@ case class OpenTypeNAMETable(
     )
   }
 
-  override def length(b: ByteAllocator): UInt = UInt(6) + records.map(_(this).length(b)).toArray.qsum + strData.length(b)
+  override def length(b: ByteAllocator): UInt = {
+    records.foldLeft(UInt(6) + strData.length(b)) { // Start with 6 because ???
+      case (accum, record) => accum + record(this).length(b)
+    }
+  }
 
   /**
     * Gets data sections if this data block has offsets
