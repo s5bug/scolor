@@ -10,21 +10,24 @@ class OpenTypeFontTest extends FlatSpec {
 
   val expected =
     """4f 54 54 4f 00 01 00 10 00 01 00 00 6e 61 6d 65
-      |12 56 19 e5 00 00 00 1c 00 00 00 92 00 00 00 00
-      |00 00 00 06 00 4e 00 03 00 01 04 09 00 04 00 0b
-      |00 df 00 03 00 01 04 13 00 04 00 0c 00 ea 00 03
-      |00 01 04 1d 00 04 00 0b 00 f6 00 01 00 00 00 04
-      |00 00 00 0b 00 df 00 01 00 04 00 04 00 00 00 0c
-      |00 ea 00 01 00 05 00 04 00 00 00 0b 00 f6 00 48
-      |00 65 00 6c 00 6c 00 6f 00 20 00 57 00 6f 00 72
-      |00 6c 00 64 00 48 00 61 00 6c 00 6c 00 6f 00 20
-      |00 57 00 65 00 72 00 65 00 6c 00 64 00 48 00 65
-      |00 6a 00 20 00 56 00 e4 00 72 00 6c 00 64 00 65
-      |00 6e 00 48 00 65 00 6c 00 6c 00 6f 00 20 00 57
-      |00 6f 00 72 00 6c 00 64 00 48 00 61 00 6c 00 6c
-      |00 6f 00 20 00 57 00 65 00 72 00 65 00 6c 00 64
-      |00 48 00 65 00 6a 00 20 00 56 00 e4 00 72 00 6c
-      |00 64 00 65 00 6e""".stripMargin
+      |57 17 d3 91 00 00 00 1c 00 00 00 b8 00 00 00 00
+      |00 00 00 08 00 66 00 03 00 01 04 09 00 04 00 0b
+      |01 1d 00 03 00 01 04 13 00 04 00 0c 01 28 00 03
+      |00 01 04 1d 00 04 00 0b 01 34 00 01 00 00 00 04
+      |00 00 00 0b 01 1d 00 01 00 04 00 04 00 00 00 0c
+      |01 28 00 01 00 05 00 04 00 00 00 0b 01 34 00 03
+      |00 01 04 11 00 04 00 07 01 3f 00 01 00 0b 00 04
+      |00 01 00 07 01 3f 00 48 00 65 00 6c 00 6c 00 6f
+      |00 20 00 57 00 6f 00 72 00 6c 00 64 00 48 00 61
+      |00 6c 00 6c 00 6f 00 20 00 57 00 65 00 72 00 65
+      |00 6c 00 64 00 48 00 65 00 6a 00 20 00 56 00 e4
+      |00 72 00 6c 00 64 00 65 00 6e 00 48 00 65 00 6c
+      |00 6c 00 6f 00 20 00 57 00 6f 00 72 00 6c 00 64
+      |00 48 00 61 00 6c 00 6c 00 6f 00 20 00 57 00 65
+      |00 72 00 65 00 6c 00 64 00 48 00 65 00 6a 00 20
+      |00 56 00 e4 00 72 00 6c 00 64 00 65 00 6e 30 53
+      |30 93 30 6b 30 61 30 6f 4e 16 75 4c 30 53 30 93
+      |30 6b 30 61 30 6f 4e 16 75 4c""".stripMargin
 
   "OpenTypeFont" should "create the expected bytes" in {
     val openTypeFontString =
@@ -38,6 +41,8 @@ class OpenTypeFontTest extends FlatSpec {
               NameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`English`), content = OTFString("Hello World")),
               NameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`Dutch`), content = OTFString("Hallo Wereld")),
               NameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`Swedish`), content = OTFString("Hej Världen")),
+              NameRecord(d = WindowsLanguage.`Japanese`.`Japan`, content = OTFString("こんにちは世界")),
+              NameRecord(d = MacLanguage(MacLanguage.Script.`Japanese`, MacLanguage.Language.`Japanese`), content = OTFString("こんにちは世界")),
             )
           )
         )

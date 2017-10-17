@@ -5,7 +5,15 @@ import spire.math.UByte
 
 trait Table extends EnclosingSectionDataType {
 
+  /**
+    * @return the table tag/name/identifier
+    */
   def name: String
+
+  /**
+    * @param b The byte allocator
+    * @return the sections/partitions/rows of a table
+    */
   def sections(b: ByteAllocator): Seq[Section]
 
   /**
