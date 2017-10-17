@@ -7,9 +7,17 @@ import spire.syntax.std.array._
 
 case class OTFArray[T <: Data](elems: Seq[T]) extends SectionDataType {
 
-  override def length(b: ByteAllocator): UInt = elems.map(_.length(b)).toArray.qsum
+  override def length(b: ByteAllocator): UInt = {
+  	elems.foldLeft(UInt(0)) {
+  		case (accum, elem) => accum + elem.length(b)
+  	}
+  }
 
-  override def getBytes(b: ByteAllocator): Array[UByte] = elems.flatMap(_.getBytes(b)).toArray
+  override def getBytes(b: ByteAllocator): Array[UByte] = {
+  	elems.foldLeft(Array.empty[UByte]) {
+  		case (accum, elem) => accum ++ elem.getBytes(b)
+  	}
+  }
 
   /**
     * Gets data sections if this data block has offsets
