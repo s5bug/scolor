@@ -3,11 +3,11 @@ package com.tsunderebug.scolor.otf.types
 import com.tsunderebug.scolor.{ByteAllocator, Offset}
 import spire.math.{UByte, UInt, UShort}
 
-case class Offset16(offset: Int) extends Offset {
+case class OTFOffset16(offset: Int) extends Offset {
 
   override def position: UInt = UInt(offset)
 
-  override def getBytes(b: ByteAllocator): Array[UByte] = UInt16(UShort(offset)).getBytes(b)
+  override def getBytes(b: ByteAllocator): Array[UByte] = OTFUInt16(UShort(offset)).getBytes(b)
 
   override def length(b: ByteAllocator) = UInt(2)
 

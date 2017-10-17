@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.otf.tables.OpenTypeTable
 
-class OpenTypeCBDTTable(
+class OTFCBDTTable(
                        bitmaps: Seq[BufferedImage]
                        ) extends OpenTypeTable {
 

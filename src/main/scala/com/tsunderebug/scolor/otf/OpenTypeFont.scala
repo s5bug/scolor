@@ -4,7 +4,7 @@ import java.io.{File, FileOutputStream}
 import java.nio.{ByteBuffer, ByteOrder}
 
 import com.tsunderebug.scolor._
-import com.tsunderebug.scolor.otf.types.Offset32
+import com.tsunderebug.scolor.otf.types.OTFOffset32
 import com.tsunderebug.scolor.table.Table
 import spire.math.{UByte, UInt, UShort}
 import spire.syntax.std.array._
@@ -48,7 +48,7 @@ case class OpenTypeFont(tables: Seq[Table]) extends Font {
       buff ++= dataOffset.position.bytes
       buff ++= t.length(b).bytes
     })
-    b.insert(Offset32(0), buff.toArray)
+    b.insert(OTFOffset32(0), buff.toArray)
   }
 
   def writeTables(b: ByteAllocator): Unit = {
