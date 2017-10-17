@@ -31,7 +31,7 @@ case class OTFNAMETable(
   }
 
   override def length(b: ByteAllocator): UInt = {
-    records.foldLeft(UInt(6) + strData.length(b)) { // Start with 6 because ???
+    records.foldLeft(UInt(6) + strData.length(b)) { // 6 is the length of the data in bytes before the record data
       case (accum, record) => accum + record(this).length(b)
     }
   }
