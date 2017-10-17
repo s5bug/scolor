@@ -31,7 +31,7 @@ object OTFEncodingRecord {
   trait EncodingFormat extends EnclosingSectionDataType {
 
     /**
-      * For mapping multiple characters to one glyph, see the GSUB table.
+      * For mapping multiple glyphs to one glyph, see the GSUB table.
       * @param c The codepoint
       * @param g The glyph
       */
