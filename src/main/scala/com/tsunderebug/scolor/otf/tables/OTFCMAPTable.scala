@@ -20,7 +20,9 @@ case class OTFCMAPTable(
   )
 
   override def length(b: ByteAllocator): UInt = {
-    UInt(sections(b).map(_.data.length(b).toLong).sum)
+    sections(b).foldLeft(UInt(0)) {
+      case (accum, section) => accum + section.data.length(b)
+    }
   }
 
   /**
