@@ -1,11 +1,11 @@
 package com.tsunderebug.scolor.otf.tables
 
 import com.tsunderebug.scolor.ByteAllocator
-import com.tsunderebug.scolor.otf.types.{EncodingRecord, OTFArray, TabledEncodingRecord, UInt16}
+import com.tsunderebug.scolor.otf.types.{EncodingRecord, OTFArray, TabledEncodingRecord, OTFUInt16}
 import com.tsunderebug.scolor.table.Section
 import spire.math.{UInt, UShort}
 
-case class OpenTypeCMAPTable(
+case class OTFCMAPTable(
                        encodingRecords: Seq[EncodingRecord]
                        ) extends OpenTypeTable {
 
@@ -14,8 +14,8 @@ case class OpenTypeCMAPTable(
   private val tabledRecords: Seq[TabledEncodingRecord] = encodingRecords.map(_(this))
 
   override def sections(b: ByteAllocator): Seq[Section] = Seq(
-    Section("version", UInt16(UShort(0))),
-    Section("numTables", UInt16(UShort(encodingRecords.length))), // TODO CMAP encoding class
+    Section("version", OTFUInt16(UShort(0))),
+    Section("numTables", OTFUInt16(UShort(encodingRecords.length))), // TODO CMAP encoding class
     Section("data", OTFArray(tabledRecords))
   )
 

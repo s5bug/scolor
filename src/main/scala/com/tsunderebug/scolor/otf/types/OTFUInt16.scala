@@ -2,15 +2,15 @@ package com.tsunderebug.scolor.otf.types
 
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.table.SectionDataType
-import spire.math.{UByte, UInt}
+import spire.math.{UByte, UInt, UShort}
 
-case class UInt32(value: UInt) extends SectionDataType {
+case class OTFUInt16(value: UShort) extends SectionDataType {
 
   override def getBytes(b: ByteAllocator): Array[UByte] = {
-    Array(((value.toInt & 0xFF000000) >> 24).toByte, ((value.toInt & 0x00FF0000) >> 16).toByte, ((value.toInt & 0x0000FF00) >> 8).toByte, (value.toInt & 0x000000FF).toByte).map(UByte(_))
+    Array(((value.toShort & 0xFF00) >> 8).toByte, (value.toShort & 0x00FF).toByte).map(UByte(_))
   }
 
-  override def length(b: ByteAllocator) = UInt(4)
+  override def length(b: ByteAllocator): UInt = UInt(2)
 
   /**
     * Gets data sections if this data block has offsets
@@ -19,5 +19,4 @@ case class UInt32(value: UInt) extends SectionDataType {
     * @return an array of Data objects
     */
   override def getData(b: ByteAllocator) = Seq()
-
 }

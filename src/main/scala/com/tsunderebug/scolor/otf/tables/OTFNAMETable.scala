@@ -6,7 +6,7 @@ import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
 import spire.syntax.std.array._
 
-case class OpenTypeNAMETable(
+case class OTFNAMETable(
                             records: Seq[NameRecord]
                             ) extends OpenTypeTable {
 
@@ -22,9 +22,9 @@ case class OpenTypeNAMETable(
     }
     val dataOff = off.position + UInt(6) + tabeledRecordsSum
     Seq(
-      Section("format", UInt16(UShort(0))),
-      Section("count", UInt16(UShort(records.length))),
-      Section("stringOffset", Offset16(6 + tabeledRecordsSum.toInt)),
+      Section("format", OTFUInt16(UShort(0))),
+      Section("count", OTFUInt16(UShort(records.length))),
+      Section("stringOffset", OTFOffset16(6 + tabeledRecordsSum.toInt)),
       Section("nameRecords", OTFArray(tabeledRecords)),
       Section("data", strData)
     )

@@ -1,7 +1,7 @@
 package com.tsunderebug.scolor.otf.types
 
-import com.tsunderebug.scolor.otf.tables.OpenTypeNAMETable
-import com.tsunderebug.scolor.otf.types.gen.WindowsLanguage
+import com.tsunderebug.scolor.otf.tables.OTFNAMETable
+import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
 import com.tsunderebug.scolor.table._
 import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
@@ -13,16 +13,16 @@ private[scolor] class TabledNameRecord(
                                 languageID: UShort,
                                 nameID: UShort,
                                 val data: OTFString,
-                                table: OpenTypeNAMETable
+                                table: OTFNAMETable
                               ) extends EnclosingSectionDataType {
 
   override def sections(b: ByteAllocator): Seq[Section] = Seq(
-    Section("platformID", UInt16(platformID)),
-    Section("encodingID", UInt16(encodingID)),
-    Section("languageID", UInt16(languageID)),
-    Section("nameID", UInt16(nameID)),
-    Section("length", UInt16(UShort(data.length(b).toShort))),
-    Section("offset", Offset16((b.allocate(data).position - b.allocate(table).position).toInt + 5 + table.records.map(_.apply(table).length(b)).toArray.qsum.toInt))
+    Section("platformID", OTFUInt16(platformID)),
+    Section("encodingID", OTFUInt16(encodingID)),
+    Section("languageID", OTFUInt16(languageID)),
+    Section("nameID", OTFUInt16(nameID)),
+    Section("length", OTFUInt16(UShort(data.length(b).toShort))),
+    Section("offset", OTFOffset16((b.allocate(data).position - b.allocate(table).position).toInt + 5 + table.records.map(_.apply(table).length(b)).toArray.qsum.toInt))
   )
 
   override def length(b: ByteAllocator): UInt = UInt(12)
@@ -43,9 +43,9 @@ case class NameRecord(
                        languageID: UShort,
                        nameID: UShort,
                        data: OTFString
-                     ) extends RequireTable[OpenTypeNAMETable, TabledNameRecord] {
+                     ) extends RequireTable[OTFNAMETable, TabledNameRecord] {
 
-  override def apply(t: OpenTypeNAMETable) = new TabledNameRecord(platformID, encodingID, languageID, nameID, data, t)
+  override def apply(t: OTFNAMETable) = new TabledNameRecord(platformID, encodingID, languageID, nameID, data, t)
 
 }
 
@@ -54,7 +54,9 @@ object NameRecord {
   def apply(nameID: UShort = UShort(4), d: WindowsLanguage.Dialect, content: OTFString): NameRecord = NameRecord(UShort(3), UShort(1), d.i, nameID, content)
 
   // This is a workaround for scala not liking default overloads :/
-  def apply(script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(UShort(1), script, language, UShort(4), content)
+  def apply(script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(script, language, UShort(4), content)
   def apply(nameID: UShort, script: UShort, language: UShort, content: OTFString): NameRecord = NameRecord(UShort(1), script, language, nameID, content)
+  def apply(d: MacLanguage, content: OTFString): NameRecord = NameRecord(d.script, d.language, UShort(4), content)
+  def apply(nameID: UShort, d: MacLanguage, content: OTFString): NameRecord = NameRecord(nameID, d.script, d.language, UShort(4), content)
 
 }
