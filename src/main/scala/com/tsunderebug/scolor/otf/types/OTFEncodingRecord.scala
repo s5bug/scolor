@@ -42,19 +42,18 @@ object OTFEncodingRecord {
     */
   case class SegmentedCoverageEncodingFormat(smg: Seq[SequentialMapGroup]) extends EncodingFormat {
 
-    override def getGlyphEntries: Map[Codepoint, GlyphID] = smg.map {
-        case SequentialMapGroup(s, e, g) =>
-          (s.toLong to e.toLong, g.toLong to (g + e - s).toLong)
-      }.flatMap {
-        case (cr, gr) =>
-          cr.zipWithIndex.map {
-            case (c, i) =>
-              (c, gr.drop(i.toInt).head)
+    override def getGlyphEntries: Map[Codepoint, GlyphID] = {
+      val emptyGlyph = UInt(0)
+      smg.foldLeft(Map.empty[Codepoint, GlyphID]) {
+        case (accum, SequentialMapGroup(startCharCode, endCharCode, startGlyphID)) => {
+          val glyphRange = (startGlyphID.toLong to (startGlyphID + endCharCode - startCharCode).toLong)
+          accum ++ (startCharCode.toLong to endCharCode.toLong).zipWithIndex.map {
+            //"Regardless of the encoding scheme, character codes that do not correspond to any glyph in the font should be mapped to glyph index 0. The glyph at this location must be a special glyph representing a missing character, commonly known as .notdef."
+            case (charPoint, index) => UInt(charPoint) -> glyphRange.lift(index).fold(emptyGlyph)(UInt.apply)
           }
-      }.map {
-        case (c, g) =>
-          (UInt(c), UInt(g))
-      }.toMap
+        }
+      }
+    }
 
     override def sections(b: ByteAllocator): Seq[Section] = Seq(
       Section("format", OTFUInt16(UShort(12))),
