@@ -1,10 +1,11 @@
 package com.tsunderebug.scolor.otf.types
 
+import com.tsunderebug.scolor.Models.{Codepoint, GlyphID}
+import com.tsunderebug.scolor._
 import com.tsunderebug.scolor.otf.tables.OTFCMAPTable
 import com.tsunderebug.scolor.otf.types.OTFEncodingRecord.EncodingFormat
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, RequireTable, Section}
-import com.tsunderebug.scolor._
-import spire.math.{UByte, UInt, UShort}
+import spire.math.{UInt, UShort}
 
 private[scolor] class TabledEncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat, table: OTFCMAPTable) extends EnclosingSectionDataType {
 
@@ -30,21 +31,79 @@ object OTFEncodingRecord {
 
   trait EncodingFormat extends EnclosingSectionDataType {
 
-    /**
-      * For mapping multiple glyphs to one glyph, see the GSUB table.
-      *
-      * @param c The codepoint
-      * @param g The glyph
-      */
-    def addGlyphEntry(c: Models.Codepoint, g: Glyph): Unit
-
-    def getGlyphEntries: Map[Models.Codepoint, Glyph]
-
-    def getLength: UInt
-
-    def getBytes: Array[UByte]
+    def getGlyphEntries: Map[Models.Codepoint, GlyphID]
 
   }
 
+  /**
+    * This is the Microsoft standard character-to-glyph-index mapping table for fonts supporting Unicode
+    * supplementary-plane characters (U+10000 to U+10FFFF). This is the main format used as it can support all defined
+    * characters.
+    */
+  case class SegmentedCoverageEncodingFormat(smg: Seq[SequentialMapGroup]) extends EncodingFormat {
+
+    override def getGlyphEntries: Map[Codepoint, GlyphID] = smg.map {
+        case SequentialMapGroup(s, e, g) =>
+          (s.toLong to e.toLong, g.toLong to (g + e - s).toLong)
+      }.flatMap {
+        case (cr, gr) =>
+          cr.zipWithIndex.map {
+            case (c, i) =>
+              (c, gr.drop(i.toInt).head)
+          }
+      }.map {
+        case (c, g) =>
+          (UInt(c), UInt(g))
+      }.toMap
+
+    override def sections(b: ByteAllocator): Seq[Section] = Seq(
+      Section("format", OTFUInt16(UShort(12))),
+      Section("reserved", OTFUInt16(UShort(0))),
+      Section("length", OTFUInt32(length(b)))
+    )
+
+    /**
+      * Calculate/retrieve/return length in bytes of this data. Useful for if data needs to be allocated before it is calculated.
+      *
+      * @param b The byte allocator
+      * @return an unsigned integer describing the length of this data block
+      */
+    override def length(b: ByteAllocator): Codepoint = UInt(16 + smg.length * 12)
+
+    /**
+      * Gets data sections if this data block has offsets. Used for if data needs to be allocated but can be in any location.
+      *
+      * @param b The byte allocator
+      * @return an array of Data objects
+      */
+    override def getData(b: ByteAllocator): Seq[Data] = Seq()
+
+  }
+
+}
+
+case class SequentialMapGroup(startCodepoint: Codepoint, endCodepoint: Codepoint, startGlyphID: GlyphID) extends EnclosingSectionDataType {
+
+  override def sections(b: ByteAllocator) = Seq(
+    Section("startCharCode", OTFUInt32(startCodepoint)),
+    Section("endCharCode", OTFUInt32(endCodepoint)),
+    Section("startGlyphID", OTFUInt32(startGlyphID))
+  )
+
+  /**
+    * Calculate/retrieve/return length in bytes of this data. Useful for if data needs to be allocated before it is calculated.
+    *
+    * @param b The byte allocator
+    * @return an unsigned integer describing the length of this data block
+    */
+  override def length(b: ByteAllocator) = UInt(12)
+
+  /**
+    * Gets data sections if this data block has offsets. Used for if data needs to be allocated but can be in any location.
+    *
+    * @param b The byte allocator
+    * @return an array of Data objects
+    */
+  override def getData(b: ByteAllocator) = Seq()
 
 }

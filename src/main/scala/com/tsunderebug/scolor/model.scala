@@ -5,6 +5,7 @@ package com.tsunderebug.scolor {
     import spire.math.UInt
 
     type Codepoint = UInt
+    type GlyphID = UInt
 
   }
 
