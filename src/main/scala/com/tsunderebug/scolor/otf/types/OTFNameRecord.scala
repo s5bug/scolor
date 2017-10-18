@@ -8,13 +8,13 @@ import spire.math.{UInt, UShort}
 import spire.syntax.std.array._
 
 private[scolor] class TabledNameRecord(
-                                platformID: UShort,
-                                encodingID: UShort,
-                                languageID: UShort,
-                                nameID: UShort,
-                                val data: OTFString,
-                                table: OTFNAMETable
-                              ) extends EnclosingSectionDataType {
+                                        platformID: UShort,
+                                        encodingID: UShort,
+                                        languageID: UShort,
+                                        nameID: UShort,
+                                        val data: OTFString,
+                                        table: OTFNAMETable
+                                      ) extends EnclosingSectionDataType {
 
   override def sections(b: ByteAllocator): Seq[Section] = Seq(
     Section("platformID", OTFUInt16(platformID)),
@@ -38,12 +38,12 @@ private[scolor] class TabledNameRecord(
 }
 
 case class OTFNameRecord(
-                       platformID: UShort,
-                       encodingID: UShort,
-                       languageID: UShort,
-                       nameID: UShort,
-                       data: OTFString
-                     ) extends RequireTable[OTFNAMETable, TabledNameRecord] {
+                          platformID: UShort,
+                          encodingID: UShort,
+                          languageID: UShort,
+                          nameID: UShort,
+                          data: OTFString
+                        ) extends RequireTable[OTFNAMETable, TabledNameRecord] {
 
   override def apply(t: OTFNAMETable) = new TabledNameRecord(platformID, encodingID, languageID, nameID, data, t)
 
@@ -55,8 +55,11 @@ object OTFNameRecord {
 
   // This is a workaround for scala not liking default overloads :/
   def apply(script: UShort, language: UShort, content: OTFString): OTFNameRecord = OTFNameRecord(script, language, UShort(4), content)
+
   def apply(nameID: UShort, script: UShort, language: UShort, content: OTFString): OTFNameRecord = OTFNameRecord(UShort(1), script, language, nameID, content)
+
   def apply(d: MacLanguage, content: OTFString): OTFNameRecord = OTFNameRecord(d.script, d.language, UShort(4), content)
+
   def apply(nameID: UShort, d: MacLanguage, content: OTFString): OTFNameRecord = OTFNameRecord(nameID, d.script, d.language, UShort(4), content)
 
 }

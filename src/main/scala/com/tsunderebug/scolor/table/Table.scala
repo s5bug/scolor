@@ -18,6 +18,7 @@ trait Table extends EnclosingSectionDataType {
 
   /**
     * The bytes of table data. The data does not have to be padded.
+    *
     * @return Table data as a byte array.
     */
   def getBytes(b: ByteAllocator): Array[UByte]

@@ -6,8 +6,8 @@ import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.otf.tables.OpenTypeTable
 
 class OTFCBDTTable(
-                       bitmaps: Seq[BufferedImage]
-                       ) extends OpenTypeTable {
+                    bitmaps: Seq[BufferedImage]
+                  ) extends OpenTypeTable {
 
   override def name = "cbdt"
 

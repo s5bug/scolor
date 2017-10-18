@@ -4,16 +4,15 @@ import com.tsunderebug.scolor.otf.types._
 import com.tsunderebug.scolor.table.Section
 import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
-import spire.syntax.std.array._
 
 case class OTFNAMETable(
-                            records: Seq[OTFNameRecord]
-                            ) extends OpenTypeTable {
+                         records: Seq[OTFNameRecord]
+                       ) extends OpenTypeTable {
 
   override def name = "name"
 
   val strData = OTFArray(records.map((r) => OTFString(r.data.s)))
-  private val tabeledRecords = records.map(_(this))
+  private val tabeledRecords = records.map(_ (this))
 
   override def sections(b: ByteAllocator): Seq[Section] = {
     val off = b.allocate(this)

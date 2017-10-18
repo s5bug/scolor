@@ -16,7 +16,8 @@ trait Font {
 
   /**
     * Write a font/set of fonts to a directory. Multiple are allowed for different platforms or styles.
-    * @param dir The directory
+    *
+    * @param dir  The directory
     * @param name The base name of the font
     */
   def writeFile(dir: File, name: String): Unit

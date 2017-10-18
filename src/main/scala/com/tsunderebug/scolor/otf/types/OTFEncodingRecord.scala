@@ -32,6 +32,7 @@ object OTFEncodingRecord {
 
     /**
       * For mapping multiple glyphs to one glyph, see the GSUB table.
+      *
       * @param c The codepoint
       * @param g The glyph
       */
@@ -42,6 +43,8 @@ object OTFEncodingRecord {
     def getLength: UInt
 
     def getBytes: Array[UByte]
+
   }
+
 
 }

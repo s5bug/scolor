@@ -6,12 +6,12 @@ import com.tsunderebug.scolor.table.Section
 import spire.math.{UInt, UShort}
 
 case class OTFCMAPTable(
-                       encodingRecords: Seq[OTFEncodingRecord]
+                         encodingRecords: Seq[OTFEncodingRecord]
                        ) extends OpenTypeTable {
 
   override def name = "cmap"
 
-  private val tabledRecords: Seq[TabledEncodingRecord] = encodingRecords.map(_(this))
+  private val tabledRecords: Seq[TabledEncodingRecord] = encodingRecords.map(_ (this))
 
   override def sections(b: ByteAllocator): Seq[Section] = Seq(
     Section("version", OTFUInt16(UShort(0))),

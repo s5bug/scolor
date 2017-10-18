@@ -9,6 +9,7 @@ trait Glyph extends Data {
 
   /**
     * Used for drawing the glyph in places
+    *
     * @return An image of the glyph
     */
   def toImage: BufferedImage
