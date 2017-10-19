@@ -18,7 +18,7 @@ class SequentialMapGroupTest() extends FlatSpec with OptionValues {
       }
     }
 
-    it should "have a length of 12" in {
+    it should "have a length of 12 bytes (because SequentialMapGroup has 3 sections of 4 bytes each)" in {
       assertResult(UInt(12)) {
         SequentialMapGroup(UInt(1), UInt(5), UInt(0)).length(byteAllocator)
       }
