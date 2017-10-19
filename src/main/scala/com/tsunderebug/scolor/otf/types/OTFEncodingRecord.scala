@@ -43,19 +43,19 @@ object OTFEncodingRecord {
     */
   case class SegmentedCoverageEncodingFormat(smg: Seq[SequentialMapGroup]) extends EncodingFormat {
 
-    /** Retrieve a map of codepoints to glyph IDs based on the SequentialMapGroup of this instance 
-     * @note Regardless of the encoding scheme, character codes that do not correspond to any glyph in the font are mapped to glyph index 0. The glyph at this location must be a special glyph representing a missing character, commonly known as .notdef.
-     * @return Map of codepoints to glyph ids, as noted any glyphs not defined for a given character code will be 0
-     */
+    /** Retrieve a map of codepoints to glyph IDs based on the SequentialMapGroup of this instance
+      *
+      * @note Regardless of the encoding scheme, character codes that do not correspond to any glyph in the font are mapped to glyph index 0. The glyph at this location must be a special glyph representing a missing character, commonly known as .notdef.
+      * @return Map of codepoints to glyph ids, as noted any glyphs not defined for a given character code will be 0
+      */
     override def getGlyphEntries: Map[Codepoint, GlyphID] = {
       val emptyGlyph = UInt(0)
       smg.foldLeft(Map.empty[Codepoint, GlyphID]) {
-        case (accum, SequentialMapGroup(startCharCode, endCharCode, startGlyphID)) => {
-          val glyphRange = (startGlyphID.toLong to (startGlyphID + endCharCode - startCharCode).toLong)
+        case (accum, SequentialMapGroup(startCharCode, endCharCode, startGlyphID)) =>
+          val glyphRange = startGlyphID.toLong to (startGlyphID + endCharCode - startCharCode).toLong
           accum ++ (startCharCode.toLong to endCharCode.toLong).zipWithIndex.map {
             case (charPoint, index) => UInt(charPoint) -> glyphRange.lift(index).fold(emptyGlyph)(UInt.apply)
           }
-        }
       }
     }
 
@@ -90,11 +90,12 @@ object OTFEncodingRecord {
 case class SequentialMapGroup(startCodepoint: Codepoint, endCodepoint: Codepoint, startGlyphID: GlyphID) extends EnclosingSectionDataType with Ordered[SequentialMapGroup] {
 
   /** Compare this Group to another
-   * @param that The SequentialMapGroup to compare this instance to
-   * @note Groups must be sorted by increasing startCharCode. A group's endCharCode must be less than the startCharCode of the following group, if any. The endCharCode is used, rather than a count, because comparisons for group matching are usually done on an existing character code, and having the endCharCode be there explicitly saves the necessity of an addition per group.
-   * @see https://www.microsoft.com/typography/otspec/cmap.htm#format12
-   */
-  def compare(that: SequentialMapGroup) = {
+    *
+    * @param that The SequentialMapGroup to compare this instance to
+    * @note Groups must be sorted by increasing startCharCode. A group's endCharCode must be less than the startCharCode of the following group, if any. The endCharCode is used, rather than a count, because comparisons for group matching are usually done on an existing character code, and having the endCharCode be there explicitly saves the necessity of an addition per group.
+    * @see https://www.microsoft.com/typography/otspec/cmap.htm#format12
+    */
+  def compare(that: SequentialMapGroup): Int = {
     this.startCodepoint.toInt.compare(that.startCodepoint.toInt)
   }
 
