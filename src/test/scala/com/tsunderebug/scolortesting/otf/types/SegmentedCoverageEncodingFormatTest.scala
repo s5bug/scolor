@@ -50,4 +50,24 @@ class SegmentedCoverageEncodingFormatTest extends FlatSpec with OptionValues {
       sectionsWithGroups.find(_.name == "length").value.data
     }
   }
+
+  it should "retrieve glyphs based on the groups provided to it" in {
+    val groups = for (i <- (0 to 6 by 2).reverse) yield SequentialMapGroup(UInt(i), UInt(i +1), UInt(0))
+    val expectedMap: Map[UInt, UInt] = Map(
+      0 -> 0,
+      1 -> 1,
+      2 -> 0,
+      3 -> 1,
+      4 -> 0,
+      5 -> 1,
+      6 -> 0,
+      7 -> 1
+    ).map {
+      case (k,v) => UInt(k) -> UInt(v)
+    }
+    
+    assertResult(expectedMap) {
+      OTFEncodingRecord.SegmentedCoverageEncodingFormat(groups).getGlyphEntries
+    }
+  }
 }
