@@ -49,6 +49,10 @@ class SegmentedCoverageEncodingFormatTest extends FlatSpec with OptionValues {
     assertResult(OTFUInt32(headerSize + groupSize)) {
       sectionsWithGroups.find(_.name == "length").value.data
     }
+    
+    assertResult(OTFUInt32(UInt(groups.size))) {
+      sectionsWithGroups.find(_.name == "numGroups").value.data
+    }
   }
 
   it should "retrieve glyphs based on the groups provided to it" in {
@@ -65,7 +69,7 @@ class SegmentedCoverageEncodingFormatTest extends FlatSpec with OptionValues {
     ).map {
       case (k,v) => UInt(k) -> UInt(v)
     }
-    
+
     assertResult(expectedMap) {
       OTFEncodingRecord.SegmentedCoverageEncodingFormat(groups).getGlyphEntries
     }
