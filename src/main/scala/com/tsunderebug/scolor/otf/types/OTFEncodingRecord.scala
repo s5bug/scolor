@@ -62,7 +62,9 @@ object OTFEncodingRecord {
     override def sections(b: ByteAllocator): Seq[Section] = Seq(
       Section("format", OTFUInt16(UShort(12))),
       Section("reserved", OTFUInt16(UShort(0))),
-      Section("length", OTFUInt32(length(b)))
+      Section("length", OTFUInt32(length(b))),
+      Section("numGroups", OTFUInt32(UInt(smg.length))),
+      Section("groups[numGroups]", OTFArray(smg.sorted))
     )
 
     /**
