@@ -10,7 +10,7 @@ class SegmentedCoverageEncodingFormatTest extends FlatSpec with OptionValues {
   private def byteAllocator = new OTFByteAllocator(OpenTypeFont(Nil))
 
   "SegmentedCoverageEncodingFormat" should "return its groups sorted when sections are retrieved" in {
-    val groupsOutOfOrder = for (i <- (10 to 0 by -2).reverse) yield SequentialMapGroup(UInt(i), UInt(i +1), UInt(0))
+    val groupsOutOfOrder = for (i <- (10 to 0 by 2).reverse) yield SequentialMapGroup(UInt(i), UInt(i +1), UInt(0))
     val sections = OTFEncodingRecord.SegmentedCoverageEncodingFormat(groupsOutOfOrder).sections(byteAllocator)
 
     val otfArray = sections.find(_.name == "groups[numGroups]").value.data match {
