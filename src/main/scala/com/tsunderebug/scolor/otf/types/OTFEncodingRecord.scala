@@ -6,6 +6,7 @@ import com.tsunderebug.scolor.otf.tables.OTFCMAPTable
 import com.tsunderebug.scolor.otf.types.OTFEncodingRecord.EncodingFormat
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, RequireTable, Section}
 import spire.math.{UInt, UShort}
+import scala.math.Ordered
 
 private[scolor] class TabledEncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat, table: OTFCMAPTable) extends EnclosingSectionDataType {
 
@@ -82,7 +83,16 @@ object OTFEncodingRecord {
 
 }
 
-case class SequentialMapGroup(startCodepoint: Codepoint, endCodepoint: Codepoint, startGlyphID: GlyphID) extends EnclosingSectionDataType {
+case class SequentialMapGroup(startCodepoint: Codepoint, endCodepoint: Codepoint, startGlyphID: GlyphID) extends EnclosingSectionDataType with Ordered[SequentialMapGroup] {
+
+  /** Compare this Group to another
+   * @param that The SequentialMapGroup to compare this instance to
+   * @note Groups must be sorted by increasing startCharCode. A group's endCharCode must be less than the startCharCode of the following group, if any. The endCharCode is used, rather than a count, because comparisons for group matching are usually done on an existing character code, and having the endCharCode be there explicitly saves the necessity of an addition per group.
+   * @see https://www.microsoft.com/typography/otspec/cmap.htm#format12
+   */
+  def compare(that: SequentialMapGroup) = {
+    this.startCodepoint.toInt.compare(that.startCodepoint.toInt)
+  }
 
   override def sections(b: ByteAllocator) = Seq(
     Section("startCharCode", OTFUInt32(startCodepoint)),
