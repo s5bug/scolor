@@ -1,5 +1,6 @@
 package com.tsunderebug.scolor.helper
 
+import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
@@ -19,16 +20,25 @@ case class ColorEmojiEntry(main: File, subs: Map[String, File]) {
     val a = subs + ("" -> main)
     a.map {
       case (s, f) =>
-        val bi = ImageIO.read(f)
+        val tbi = ImageIO.read(f)
+        val wtoh = tbi.getWidth.toDouble / tbi.getHeight.toDouble
+        val wmside = tbi.getWidth > tbi.getHeight
+        val bd: (Int, Int) = if (wmside) {
+          (Math.max(256, tbi.getWidth), Math.max(256 * wtoh, tbi.getHeight).toInt)
+        } else {
+          (Math.max(256 / wtoh, tbi.getWidth).toInt, Math.max(256, tbi.getHeight))
+        }
+        val bi = new BufferedImage(bd._1, bd._2, BufferedImage.TYPE_INT_ARGB)
+        bi.getGraphics.drawImage(tbi, 0, 0, bd._1, bd._2, null)
         val md = Math.max(bi.getWidth, bi.getHeight)
         val p = OTFsRGBPNG(bi)
         val d = OTFGoogleGlyphData(
           OTFGoogleSmallGlyphMetrics(
-            UByte(bi.getHeight),
-            UByte(bi.getWidth),
+            UByte(bi.getHeight - 1),
+            UByte(bi.getWidth - 1),
             (md - bi.getWidth).toByte,
             (md - bi.getHeight).toByte,
-            UByte(bi.getWidth)
+            UByte(bi.getWidth - 1)
           ),
           p
         )
