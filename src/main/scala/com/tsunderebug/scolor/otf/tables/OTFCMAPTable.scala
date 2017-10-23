@@ -1,21 +1,21 @@
 package com.tsunderebug.scolor.otf.tables
 
 import com.tsunderebug.scolor.ByteAllocator
-import com.tsunderebug.scolor.otf.types.{OTFEncodingRecord, OTFArray, TabledEncodingRecord, OTFUInt16}
+import com.tsunderebug.scolor.otf.types.{OTFArray, OTFEncodingRecord, OTFUInt16, TabledEncodingRecord}
 import com.tsunderebug.scolor.table.Section
 import spire.math.{UInt, UShort}
 
 case class OTFCMAPTable(
-                         encodingRecords: Seq[OTFEncodingRecord]
+                         encodingRecords: Traversable[OTFEncodingRecord]
                        ) extends OpenTypeTable {
 
   override def name = "cmap"
 
-  private val tabledRecords: Seq[TabledEncodingRecord] = encodingRecords.map(_ (this))
+  private val tabledRecords: Traversable[TabledEncodingRecord] = encodingRecords.map(_ (this))
 
-  override def sections(b: ByteAllocator): Seq[Section] = Seq(
+  override def sections(b: ByteAllocator): Traversable[Section] = Seq(
     Section("version", OTFUInt16(UShort(0))),
-    Section("numTables", OTFUInt16(UShort(encodingRecords.length))), // TODO CMAP encoding class
+    Section("numTables", OTFUInt16(UShort(encodingRecords.size))),
     Section("data", OTFArray(tabledRecords))
   )
 
@@ -31,6 +31,6 @@ case class OTFCMAPTable(
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(b: ByteAllocator) = Seq()
+  override def data(b: ByteAllocator) = Seq()
 
 }

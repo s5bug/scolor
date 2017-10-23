@@ -6,7 +6,7 @@ import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
 
 case class OTFNAMETable(
-                         records: Seq[OTFNameRecord]
+                         records: Traversable[OTFNameRecord]
                        ) extends OpenTypeTable {
 
   override def name = "name"
@@ -14,7 +14,7 @@ case class OTFNAMETable(
   val strData = OTFArray(records.map((r) => OTFString(r.data.s)))
   private val tabeledRecords = records.map(_ (this))
 
-  override def sections(b: ByteAllocator): Seq[Section] = {
+  override def sections(b: ByteAllocator): Traversable[Section] = {
     val off = b.allocate(this)
     val tabeledRecordsSum = tabeledRecords.foldLeft(UInt(0)) {
       case (accum, tabledRecord) => accum + tabledRecord.length(b)
@@ -22,7 +22,7 @@ case class OTFNAMETable(
     val dataOff = off.position + UInt(6) + tabeledRecordsSum
     Seq(
       Section("format", OTFUInt16(UShort(0))),
-      Section("count", OTFUInt16(UShort(records.length))),
+      Section("count", OTFUInt16(UShort(records.size))),
       Section("stringOffset", OTFOffset16(6 + tabeledRecordsSum.toInt)),
       Section("nameRecords", OTFArray(tabeledRecords)),
       Section("data", strData)
@@ -41,6 +41,6 @@ case class OTFNAMETable(
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(b: ByteAllocator): Seq[Data] = Seq()
+  override def data(b: ByteAllocator): Traversable[Data] = Seq()
 
 }

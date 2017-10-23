@@ -6,11 +6,12 @@ import com.tsunderebug.scolor.otf.tables.OTFCMAPTable
 import com.tsunderebug.scolor.otf.types.OTFEncodingRecord.EncodingFormat
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, RequireTable, Section}
 import spire.math.{UInt, UShort}
+
 import scala.math.Ordered
 
 private[scolor] class TabledEncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat, table: OTFCMAPTable) extends EnclosingSectionDataType {
 
-  override def sections(b: ByteAllocator): Seq[Section] = Seq(
+  override def sections(b: ByteAllocator): Traversable[Section] = Seq(
     Section("platformID", OTFUInt16(platformID)),
     Section("encodingID", OTFUInt16(encodingID)),
     Section("offset", OTFOffset16((b.allocate(encodingFormat).position - b.allocate(table).position).toInt))
@@ -18,7 +19,7 @@ private[scolor] class TabledEncodingRecord(platformID: UShort, encodingID: UShor
 
   override def length(b: ByteAllocator) = UInt(8)
 
-  override def getData(b: ByteAllocator): Seq[Data] = Seq(encodingFormat)
+  override def data(b: ByteAllocator): Traversable[Data] = Seq(encodingFormat)
 
 }
 
@@ -41,7 +42,7 @@ object OTFEncodingRecord {
     * supplementary-plane characters (U+10000 to U+10FFFF). This is the main format used as it can support all defined
     * characters.
     */
-  case class SegmentedCoverageEncodingFormat(smg: Seq[SequentialMapGroup]) extends EncodingFormat {
+  case class SegmentedCoverageEncodingFormat(smg: Traversable[SequentialMapGroup]) extends EncodingFormat {
 
     /** Retrieve a map of codepoints to glyph IDs based on the SequentialMapGroup of this instance
       *
@@ -63,8 +64,8 @@ object OTFEncodingRecord {
       Section("format", OTFUInt16(UShort(12))),
       Section("reserved", OTFUInt16(UShort(0))),
       Section("length", OTFUInt32(length(b))),
-      Section("numGroups", OTFUInt32(UInt(smg.length))),
-      Section("groups[numGroups]", OTFArray(smg.sorted))
+      Section("numGroups", OTFUInt32(UInt(smg.size))),
+      Section("groups[numGroups]", OTFArray(smg.toSeq.sorted))
     )
 
     /**
@@ -73,7 +74,7 @@ object OTFEncodingRecord {
       * @param b The byte allocator
       * @return an unsigned integer describing the length of this data block
       */
-    override def length(b: ByteAllocator): Codepoint = UInt(16 + smg.length * 12)
+    override def length(b: ByteAllocator): Codepoint = UInt(16 + smg.size * 12)
 
     /**
       * Gets data sections if this data block has offsets. Used for if data needs to be allocated but can be in any location.
@@ -81,7 +82,7 @@ object OTFEncodingRecord {
       * @param b The byte allocator
       * @return an array of Data objects
       */
-    override def getData(b: ByteAllocator): Seq[Data] = Seq()
+    override def data(b: ByteAllocator): Traversable[Data] = Seq()
 
   }
 
@@ -119,6 +120,6 @@ case class SequentialMapGroup(startCodepoint: Codepoint, endCodepoint: Codepoint
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(b: ByteAllocator) = Seq()
+  override def data(b: ByteAllocator) = Seq()
 
 }

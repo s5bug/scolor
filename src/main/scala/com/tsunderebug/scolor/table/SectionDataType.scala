@@ -9,6 +9,6 @@ trait SectionDataType extends Data {
     * @param b The byte allocator
     * @return an array of unsigned bytes representing the data.
     */
-  def getBytes(b: ByteAllocator): Array[UByte]
+  def bytes(b: ByteAllocator): Array[UByte]
 
 }

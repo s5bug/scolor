@@ -6,7 +6,7 @@ import spire.math.{UByte, UInt}
 
 case class OTFString(s: String) extends SectionDataType {
 
-  override def getBytes(b: ByteAllocator): Array[UByte] = s.getBytes("UTF-16BE").map(UByte(_))
+  override def bytes(b: ByteAllocator): Array[UByte] = s.getBytes("UTF-16BE").map(UByte(_))
 
   override def length(b: ByteAllocator): UInt = UInt(s.length)
 
@@ -16,6 +16,6 @@ case class OTFString(s: String) extends SectionDataType {
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(b: ByteAllocator) = Seq()
+  override def data(b: ByteAllocator) = Seq()
 
 }

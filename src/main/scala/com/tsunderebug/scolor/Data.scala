@@ -18,7 +18,7 @@ trait Data {
     * @param b The byte allocator
     * @return an array of unsigned bytes representing the font data.
     */
-  def getBytes(b: ByteAllocator): Array[UByte]
+  def bytes(b: ByteAllocator): Array[UByte]
 
   /**
     * Gets data sections if this data block has offsets. Used for if data needs to be allocated but can be in any location.
@@ -26,6 +26,6 @@ trait Data {
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  def getData(b: ByteAllocator): Seq[Data]
+  def data(b: ByteAllocator): Traversable[Data]
 
 }

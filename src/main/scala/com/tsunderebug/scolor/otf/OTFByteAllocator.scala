@@ -13,11 +13,11 @@ class OTFByteAllocator(f: OpenTypeFont) extends ByteAllocator {
   private var nextAvailableOffset: Offset = OTFOffset32(0)
 
   def insert(offset: Offset, data: Data): Unit = {
-    val bytes = data.getBytes(this)
+    val bytes = data.bytes(this)
     val top = offset.position.toInt + bytes.length
     (offset.position.toInt until top).foreach((p) => byteMap += (OTFOffset32(p) -> bytes(p - offset.position.toInt)))
     nextAvailableOffset = OTFOffset32(top + (4 - (top % 4)))
-    data.getData(this).foreach(insert)
+    data.data(this).foreach(insert)
   }
 
   def allocate(numBytes: UInt): Offset = {

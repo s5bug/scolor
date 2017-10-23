@@ -2,18 +2,16 @@ package com.tsunderebug.scolor.otf
 
 import com.tsunderebug.scolor.Offset
 import com.tsunderebug.scolor.otf.types.OTFOffset32
-
-import spire.math.{UByte, UInt}
-
 import org.scalatest.{FlatSpec, PrivateMethodTester}
+import spire.math.UInt
 
 class OTFByteAllocatorTest extends FlatSpec with PrivateMethodTester {
   
   /* use PrivateMethodTester to access private values in class */
-  val nextAvailableOffset = PrivateMethod[Offset]('nextAvailableOffset)
+  val nextAvailableOffset: PrivateMethod[Offset] = PrivateMethod[Offset]('nextAvailableOffset)
 
   "allocate" should "move the next available offset correctly" in {
-    val otfByteAllocator = new OTFByteAllocator(OpenTypeFont(Nil))    
+    val otfByteAllocator = new OTFByteAllocator(new OpenTypeFont(Nil))
     otfByteAllocator.allocate(UInt(10))
 
     val nextOffset = otfByteAllocator invokePrivate nextAvailableOffset()
@@ -22,7 +20,7 @@ class OTFByteAllocatorTest extends FlatSpec with PrivateMethodTester {
   }
 
   it should "return an offset describing the next open space these bytes can fit" in {
-    val otfByteAllocator = new OTFByteAllocator(OpenTypeFont(Nil))    
+    val otfByteAllocator = new OTFByteAllocator(new OpenTypeFont(Nil))
     
     /* first we expect 0 */
     val firstOffset = otfByteAllocator.allocate(UInt(10))

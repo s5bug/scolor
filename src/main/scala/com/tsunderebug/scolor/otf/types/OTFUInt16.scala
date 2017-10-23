@@ -6,7 +6,7 @@ import spire.math.{UByte, UInt, UShort}
 
 case class OTFUInt16(value: UShort) extends SectionDataType {
 
-  override def getBytes(b: ByteAllocator): Array[UByte] = {
+  override def bytes(b: ByteAllocator): Array[UByte] = {
     Array(((value.toShort & 0xFF00) >> 8).toByte, (value.toShort & 0x00FF).toByte).map(UByte(_))
   }
 
@@ -18,5 +18,5 @@ case class OTFUInt16(value: UShort) extends SectionDataType {
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(b: ByteAllocator) = Seq()
+  override def data(b: ByteAllocator) = Seq()
 }

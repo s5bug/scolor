@@ -8,8 +8,8 @@ import spire.math.UByte
   */
 abstract class EnclosingSectionDataType extends SectionDataType {
 
-  def sections(b: ByteAllocator): Seq[Section]
+  def sections(b: ByteAllocator): Traversable[Section]
 
-  override def getBytes(b: ByteAllocator): Array[UByte] = sections(b).flatMap(_.getBytes(b)).toArray
+  override def bytes(b: ByteAllocator): Array[UByte] = sections(b).flatMap(_.getBytes(b)).toArray
 
 }

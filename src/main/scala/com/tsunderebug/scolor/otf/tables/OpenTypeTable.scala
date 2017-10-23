@@ -6,7 +6,7 @@ import spire.math.UByte
 
 abstract class OpenTypeTable extends Table {
 
-  override def getBytes(b: ByteAllocator): Array[UByte] = {
+  override def bytes(b: ByteAllocator): Array[UByte] = {
     sections(b).foldLeft(Array.empty[UByte]) {
       case (accum, section) => accum ++ section.getBytes(b)
     }

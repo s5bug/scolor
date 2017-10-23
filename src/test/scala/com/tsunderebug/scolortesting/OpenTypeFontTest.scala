@@ -2,13 +2,13 @@ package com.tsunderebug.scolortesting
 
 import com.tsunderebug.scolor.otf.OpenTypeFont
 import com.tsunderebug.scolor.otf.tables.OTFNAMETable
-import com.tsunderebug.scolor.otf.types.{OTFNameRecord, OTFString}
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
+import com.tsunderebug.scolor.otf.types.{OTFNameRecord, OTFString}
 import org.scalatest.FlatSpec
 
 class OpenTypeFontTest extends FlatSpec {
 
-  val expected =
+  val expected: String =
     """4f 54 54 4f 00 01 00 10 00 01 00 00 6e 61 6d 65
       |57 17 d3 91 00 00 00 1c 00 00 00 b8 00 00 00 00
       |00 00 00 08 00 66 00 03 00 01 04 09 00 04 00 0b
@@ -31,7 +31,7 @@ class OpenTypeFontTest extends FlatSpec {
 
   "OpenTypeFont" should "create the expected bytes" in {
     val openTypeFontString =
-      OpenTypeFont(
+      new OpenTypeFont(
         Seq(
           OTFNAMETable(
             Seq(

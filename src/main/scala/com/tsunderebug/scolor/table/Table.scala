@@ -14,13 +14,13 @@ trait Table extends EnclosingSectionDataType {
     * @param b The byte allocator
     * @return the sections/partitions/rows of a table
     */
-  def sections(b: ByteAllocator): Seq[Section]
+  def sections(b: ByteAllocator): Traversable[Section]
 
   /**
     * The bytes of table data. The data does not have to be padded.
     *
     * @return Table data as a byte array.
     */
-  def getBytes(b: ByteAllocator): Array[UByte]
+  def bytes(b: ByteAllocator): Array[UByte]
 
 }

@@ -16,7 +16,7 @@ private[scolor] class TabledNameRecord(
                                         table: OTFNAMETable
                                       ) extends EnclosingSectionDataType {
 
-  override def sections(b: ByteAllocator): Seq[Section] = Seq(
+  override def sections(b: ByteAllocator): Traversable[Section] = Seq(
     Section("platformID", OTFUInt16(platformID)),
     Section("encodingID", OTFUInt16(encodingID)),
     Section("languageID", OTFUInt16(languageID)),
@@ -33,7 +33,7 @@ private[scolor] class TabledNameRecord(
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(b: ByteAllocator): Seq[Data] = Seq(data)
+  override def data(b: ByteAllocator): Traversable[Data] = Seq(data)
 
 }
 

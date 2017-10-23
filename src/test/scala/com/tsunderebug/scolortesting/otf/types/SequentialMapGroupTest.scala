@@ -1,16 +1,15 @@
 package com.tsunderebug.scolor.otf.types
 
+import com.tsunderebug.scolor.otf.{OTFByteAllocator, OpenTypeFont}
 import org.scalatest.{FlatSpec, OptionValues}
 import spire.math.UInt
 
-import com.tsunderebug.scolor.otf.{OTFByteAllocator, OpenTypeFont}
-
 class SequentialMapGroupTest() extends FlatSpec with OptionValues {
 
-  private def byteAllocator = new OTFByteAllocator(OpenTypeFont(Nil))
+  private def byteAllocator = new OTFByteAllocator(new OpenTypeFont(Nil))
 
   "SequentialMapGroup" should "be sorted naturally by their starting character code" in {
-      val range = (0 to 10 by 2)
+    val range = 0 to 10 by 2
       val incorrectlyOrdered = for (i <- range.reverse) yield SequentialMapGroup(UInt(i), UInt(i +1), UInt(0))
       val correctlyOrdered = for (i <- range) yield SequentialMapGroup(UInt(i), UInt(i +1), UInt(0))
       assertResult(correctlyOrdered) {

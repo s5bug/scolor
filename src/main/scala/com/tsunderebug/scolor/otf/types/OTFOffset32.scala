@@ -7,7 +7,7 @@ case class OTFOffset32(offset: Long) extends Offset {
 
   override def position: UInt = UInt(offset)
 
-  override def getBytes(b: ByteAllocator): Array[UByte] = OTFUInt32(UInt(offset)).getBytes(b)
+  override def bytes(b: ByteAllocator): Array[UByte] = OTFUInt32(UInt(offset)).bytes(b)
 
   override def length(b: ByteAllocator) = UInt(4)
 
@@ -17,6 +17,6 @@ case class OTFOffset32(offset: Long) extends Offset {
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def getData(b: ByteAllocator) = Seq()
+  override def data(b: ByteAllocator) = Seq()
 
 }
