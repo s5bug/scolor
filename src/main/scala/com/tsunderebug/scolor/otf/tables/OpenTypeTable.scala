@@ -11,7 +11,9 @@ abstract class OpenTypeTable extends Table {
       case (accum, section) => accum ++ section.getBytes(b)
     }
   }
-  
-  def getPosition(b: ByteAllocator): Offset = b.allocate(this)
+
+  def position(b: ByteAllocator): Offset = b.allocate(this)
+
+  override def alignment: UByte = UByte(4)
 
 }

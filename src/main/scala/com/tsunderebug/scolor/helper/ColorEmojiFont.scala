@@ -2,13 +2,15 @@ package com.tsunderebug.scolor.helper
 
 import com.tsunderebug.scolor.Models.Codepoint
 import com.tsunderebug.scolor.otf.OpenTypeFont
-import com.tsunderebug.scolor.otf.tables.color.OTFCBDTTable
+import com.tsunderebug.scolor.otf.tables.color.apple.{OTFAppleStrikeData, OTFSBIXTable}
+import com.tsunderebug.scolor.otf.tables.color.google.OTFCBDTTable
 import com.tsunderebug.scolor.otf.tables.{OTFCMAPTable, OTFNAMETable}
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
 import com.tsunderebug.scolor.otf.types.{OTFEncodingRecord, OTFNameRecord, OTFString, SequentialMapGroup}
 import spire.math.{UInt, UShort}
 
 case class ColorEmojiFont(
+                           pixelsPerEm: UShort,
                            internationalName: String,
                            entries: Map[Codepoint, ColorEmojiEntry]
                          ) extends
@@ -52,7 +54,10 @@ case class ColorEmojiFont(
         )
       ),
       OTFCBDTTable(
-        entries.values.flatMap(_.bitmaps.values)
+        entries.values.flatMap(_.bitmaps.values.map(_._1))
+      ),
+      OTFSBIXTable(
+        Seq(OTFAppleStrikeData(pixelsPerEm, UShort(300), entries.values.flatMap(_.bitmaps.values.map(_._2))))
       )
     )
   )

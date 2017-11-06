@@ -13,6 +13,11 @@ trait Data {
   def length(b: ByteAllocator): UInt
 
   /**
+    * @return what byte modulus this data should be aligned to
+    */
+  def alignment: UByte = UByte(1)
+
+  /**
     * Get the bytes to insert at the offset the byte allocator gives you.
     *
     * @param b The byte allocator

@@ -1,26 +1,28 @@
 package com.tsunderebug.scolor.helper
 
 import java.awt.image.BufferedImage
-import java.io.File
+import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
-import com.tsunderebug.scolor.otf.tables.color.{OTFGoogleGlyphData, OTFGoogleSmallGlyphMetrics, OTFsRGBPNG}
-import org.apache.batik.anim.dom.{SAXSVGDocumentFactory, SVGDOMImplementation}
-import org.apache.batik.util.XMLResourceDescriptor
+import com.tsunderebug.scolor.otf.tables.color.OTFsRGBPNG
+import com.tsunderebug.scolor.otf.tables.color.apple.OTFAppleGlyphData
+import com.tsunderebug.scolor.otf.tables.color.google.{OTFGoogleGlyphData, OTFGoogleSmallGlyphMetrics}
+import org.w3c.dom.Document
 import spire.math.UByte
 
-case class ColorEmojiEntry(main: File, subs: Map[String, File]) {
+case class ColorEmojiEntry(main: Document, subs: Map[String, Document]) {
 
   /**
     * Used for drawing the glyph in places
     *
     * @return A raster of the glyph
     */
-  def bitmaps: Map[String, OTFGoogleGlyphData] = {
+  def bitmaps: Map[String, (OTFGoogleGlyphData, OTFAppleGlyphData)] = {
     val a = subs + ("" -> main)
     a.map {
       case (s, f) =>
-        val tbi = ImageIO.read(f)
+        val docString = new ByteArrayInputStream(f.toString.getBytes("UTF-8"))
+        val tbi = ImageIO.read(docString)
         val wtoh = tbi.getWidth.toDouble / tbi.getHeight.toDouble
         val wmside = tbi.getWidth > tbi.getHeight
         val bd: (Int, Int) = if (wmside) {
@@ -42,16 +44,12 @@ case class ColorEmojiEntry(main: File, subs: Map[String, File]) {
           ),
           p
         )
-        (s, d)
+        (s, (d, OTFAppleGlyphData(0, 0, OTFsRGBPNG(tbi))))
     }
   }
 
-  def toScalable: Map[String, _] = {
-    val parser = XMLResourceDescriptor.getXMLParserClassName
-    val impl = SVGDOMImplementation.getDOMImplementation
-    val f = new SAXSVGDocumentFactory(parser)
-    val uri = "http://www.example.org/diagram.svg"
-    val doc = f.createDocument(uri)
+  def toScalable: Map[String, _] = { // TODO make Tuple for SVG/COLR data
+
 
     Map() // TODO When SVG and COLR tables are worked on
   }

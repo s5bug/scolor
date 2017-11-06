@@ -1,4 +1,4 @@
-package com.tsunderebug.scolor.otf.tables.color
+package com.tsunderebug.scolor.otf.tables.color.google
 
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.otf.types.{OTFInt8, OTFUInt8}

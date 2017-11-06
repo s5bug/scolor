@@ -1,17 +1,22 @@
-package com.tsunderebug.scolor.otf.tables.color
+package com.tsunderebug.scolor.otf.tables.color.apple
 
 import com.tsunderebug.scolor.ByteAllocator
+import com.tsunderebug.scolor.otf.tables.color.OTFsRGBPNG
+import com.tsunderebug.scolor.otf.types.{OTFInt16, OTFString}
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, Section}
 import spire.math.UInt
 
-case class OTFGoogleGlyphData(
-                               metrics: OTFGoogleGlyphMetrics,
-                               img: OTFsRGBPNG
-                             ) extends EnclosingSectionDataType {
+case class OTFAppleGlyphData(
+                              originOffsetX: Short,
+                              originOffsetY: Short,
+                              img: OTFsRGBPNG
+                            ) extends EnclosingSectionDataType {
 
   override def sections(b: ByteAllocator) = Seq(
-    Section("metrics", metrics),
-    Section("data", img)
+    Section("originOffsetX", OTFInt16(originOffsetX)),
+    Section("originOffsetY", OTFInt16(originOffsetY)),
+    Section("imgType", OTFString("png ")),
+    Section("imgData", img)
   )
 
   /**
@@ -20,7 +25,7 @@ case class OTFGoogleGlyphData(
     * @param b The byte allocator
     * @return an unsigned integer describing the length of this data block
     */
-  override def length(b: ByteAllocator): UInt = metrics.length(b) + img.length(b)
+  override def length(b: ByteAllocator): UInt = UInt(8) + img.length(b)
 
   /**
     * Gets data sections if this data block has offsets. Used for if data needs to be allocated but can be in any location.
