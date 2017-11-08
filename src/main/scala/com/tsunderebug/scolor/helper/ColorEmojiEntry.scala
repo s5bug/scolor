@@ -1,8 +1,11 @@
 package com.tsunderebug.scolor.helper
 
 import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
+import java.io.{ByteArrayInputStream, StringWriter}
 import javax.imageio.ImageIO
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
 
 import com.tsunderebug.scolor.otf.tables.color.OTFsRGBPNG
 import com.tsunderebug.scolor.otf.tables.color.apple.OTFAppleGlyphData
@@ -21,7 +24,8 @@ case class ColorEmojiEntry(main: Document, subs: Map[String, Document]) {
     val a = subs + ("" -> main)
     a.map {
       case (s, f) =>
-        val docString = new ByteArrayInputStream(f.toString.getBytes("UTF-8"))
+        val ds = f.toXmlString
+        val docString = new ByteArrayInputStream(ds.getBytes("UTF-8"))
         val tbi = ImageIO.read(docString)
         val wtoh = tbi.getWidth.toDouble / tbi.getHeight.toDouble
         val wmside = tbi.getWidth > tbi.getHeight
@@ -52,6 +56,20 @@ case class ColorEmojiEntry(main: Document, subs: Map[String, Document]) {
 
 
     Map() // TODO When SVG and COLR tables are worked on
+  }
+
+  implicit class StringableDocument(d: Document) {
+
+    def toXmlString: String = {
+      val domSource = new DOMSource(d)
+      val writer = new StringWriter
+      val result = new StreamResult(writer)
+      val tf = TransformerFactory.newInstance
+      val transformer = tf.newTransformer
+      transformer.transform(domSource, result)
+      writer.toString
+    }
+
   }
 
 }
