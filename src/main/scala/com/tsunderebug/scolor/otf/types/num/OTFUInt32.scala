@@ -1,4 +1,4 @@
-package com.tsunderebug.scolor.otf.types
+package com.tsunderebug.scolor.otf.types.num
 
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.table.SectionDataType

@@ -2,7 +2,8 @@ package com.tsunderebug.scolor.otf.tables.color.apple
 
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.otf.tables.color.OTFsRGBPNG
-import com.tsunderebug.scolor.otf.types.{OTFInt16, OTFString}
+import com.tsunderebug.scolor.otf.types.OTFString
+import com.tsunderebug.scolor.otf.types.num.OTFInt16
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, Section}
 import spire.math.UInt
 

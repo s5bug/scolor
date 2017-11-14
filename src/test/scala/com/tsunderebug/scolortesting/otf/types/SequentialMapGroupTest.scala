@@ -1,5 +1,6 @@
 package com.tsunderebug.scolor.otf.types
 
+import com.tsunderebug.scolor.otf.types.num.OTFUInt32
 import com.tsunderebug.scolor.otf.{OTFByteAllocator, OpenTypeFont}
 import org.scalatest.{FlatSpec, OptionValues}
 import spire.math.UInt

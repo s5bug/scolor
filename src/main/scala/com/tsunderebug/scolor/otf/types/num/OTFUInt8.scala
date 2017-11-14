@@ -1,16 +1,16 @@
-package com.tsunderebug.scolor.otf.types
+package com.tsunderebug.scolor.otf.types.num
 
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.table.SectionDataType
 import spire.math.{UByte, UInt}
 
-case class OTFInt8(value: Byte) extends SectionDataType {
+case class OTFUInt8(value: UByte) extends SectionDataType {
 
   /**
     * @param b The byte allocator
     * @return an array of unsigned bytes representing the data.
     */
-  override def bytes(b: ByteAllocator): Array[UByte] = Array(value).map(UByte(_))
+  override def bytes(b: ByteAllocator) = Array(value)
 
   /**
     * Calculate/retrieve/return length in bytes of this data. Useful for if data needs to be allocated before it is calculated.

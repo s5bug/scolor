@@ -4,6 +4,7 @@ import com.tsunderebug.scolor.Models.{Codepoint, GlyphID}
 import com.tsunderebug.scolor._
 import com.tsunderebug.scolor.otf.tables.OTFCMAPTable
 import com.tsunderebug.scolor.otf.types.OTFEncodingRecord.EncodingFormat
+import com.tsunderebug.scolor.otf.types.num.{OTFUInt16, OTFUInt32}
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, RequireTable, Section}
 import spire.math.{UInt, UShort}
 

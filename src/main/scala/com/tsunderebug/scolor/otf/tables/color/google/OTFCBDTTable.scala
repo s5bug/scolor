@@ -3,6 +3,7 @@ package com.tsunderebug.scolor.otf.tables.color.google
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.otf.tables.OpenTypeTable
 import com.tsunderebug.scolor.otf.types._
+import com.tsunderebug.scolor.otf.types.num.OTFUInt16
 import com.tsunderebug.scolor.table.Section
 import spire.math.{UInt, UShort}
 import spire.syntax.std.array._

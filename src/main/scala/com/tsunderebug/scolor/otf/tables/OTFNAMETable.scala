@@ -1,6 +1,7 @@
 package com.tsunderebug.scolor.otf.tables
 
 import com.tsunderebug.scolor.otf.types._
+import com.tsunderebug.scolor.otf.types.num.OTFUInt16
 import com.tsunderebug.scolor.table.Section
 import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}

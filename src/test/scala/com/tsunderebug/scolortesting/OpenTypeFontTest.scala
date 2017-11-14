@@ -2,8 +2,8 @@ package com.tsunderebug.scolortesting
 
 import com.tsunderebug.scolor.otf.OpenTypeFont
 import com.tsunderebug.scolor.otf.tables.OTFNAMETable
+import com.tsunderebug.scolor.otf.types.OTFNameRecord
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
-import com.tsunderebug.scolor.otf.types.{OTFNameRecord, OTFString}
 import org.scalatest.FlatSpec
 
 class OpenTypeFontTest extends FlatSpec {
@@ -35,14 +35,14 @@ class OpenTypeFontTest extends FlatSpec {
         Seq(
           OTFNAMETable(
             Seq(
-              OTFNameRecord(d = WindowsLanguage.`English`.`United States`, content = OTFString("Hello World")),
-              OTFNameRecord(d = WindowsLanguage.`Dutch`.`Netherlands`, content = OTFString("Hallo Wereld")),
-              OTFNameRecord(d = WindowsLanguage.`Swedish`.`Sweden`, content = OTFString("Hej Världen")),
-              OTFNameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`English`), content = OTFString("Hello World")),
-              OTFNameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`Dutch`), content = OTFString("Hallo Wereld")),
-              OTFNameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`Swedish`), content = OTFString("Hej Världen")),
-              OTFNameRecord(d = WindowsLanguage.`Japanese`.`Japan`, content = OTFString("こんにちは世界")),
-              OTFNameRecord(d = MacLanguage(MacLanguage.Script.`Japanese`, MacLanguage.Language.`Japanese`), content = OTFString("こんにちは世界")),
+              OTFNameRecord(d = WindowsLanguage.`English`.`United States`, content = "Hello World"),
+              OTFNameRecord(d = WindowsLanguage.`Dutch`.`Netherlands`, content = "Hallo Wereld"),
+              OTFNameRecord(d = WindowsLanguage.`Swedish`.`Sweden`, content = "Hej Världen"),
+              OTFNameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`English`), content = "Hello World"),
+              OTFNameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`Dutch`), content = "Hallo Wereld"),
+              OTFNameRecord(d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`Swedish`), content = "Hej Världen"),
+              OTFNameRecord(d = WindowsLanguage.`Japanese`.`Japan`, content = "こんにちは世界"),
+              OTFNameRecord(d = MacLanguage(MacLanguage.Script.`Japanese`, MacLanguage.Language.`Japanese`), content = "こんにちは世界"),
             )
           )
         )

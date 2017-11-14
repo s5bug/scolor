@@ -6,7 +6,7 @@ import com.tsunderebug.scolor.otf.tables.color.apple.{OTFAppleStrikeData, OTFSBI
 import com.tsunderebug.scolor.otf.tables.color.google.OTFCBDTTable
 import com.tsunderebug.scolor.otf.tables.{OTFCMAPTable, OTFNAMETable}
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
-import com.tsunderebug.scolor.otf.types.{OTFEncodingRecord, OTFNameRecord, OTFString, SequentialMapGroup}
+import com.tsunderebug.scolor.otf.types.{OTFEncodingRecord, OTFNameRecord, SequentialMapGroup}
 import spire.math.{UInt, UShort}
 
 case class ColorEmojiFont(
@@ -21,11 +21,11 @@ case class ColorEmojiFont(
         Seq(
           OTFNameRecord(
             d = WindowsLanguage.`English`.`United States`,
-            content = OTFString(internationalName)
+            content = internationalName
           ),
           OTFNameRecord(
             d = MacLanguage(MacLanguage.Script.`Roman`, MacLanguage.Language.`English`),
-            content = OTFString(internationalName)
+            content = internationalName
           )
         )
       ),

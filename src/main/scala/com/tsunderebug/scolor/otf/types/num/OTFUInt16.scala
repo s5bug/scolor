@@ -1,13 +1,13 @@
-package com.tsunderebug.scolor.otf.types
+package com.tsunderebug.scolor.otf.types.num
 
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.table.SectionDataType
-import spire.math.{UByte, UInt}
+import spire.math.{UByte, UInt, UShort}
 
-case class OTFInt16(value: Short) extends SectionDataType {
+case class OTFUInt16(value: UShort) extends SectionDataType {
 
   override def bytes(b: ByteAllocator): Array[UByte] = {
-    Array(((value & 0xFF00) >> 8).toByte, (value & 0x00FF).toByte).map(UByte(_))
+    Array(((value.toShort & 0xFF00) >> 8).toByte, (value.toShort & 0x00FF).toByte).map(UByte(_))
   }
 
   override def length(b: ByteAllocator): UInt = UInt(2)
@@ -19,5 +19,4 @@ case class OTFInt16(value: Short) extends SectionDataType {
     * @return an array of Data objects
     */
   override def data(b: ByteAllocator) = Seq()
-
 }

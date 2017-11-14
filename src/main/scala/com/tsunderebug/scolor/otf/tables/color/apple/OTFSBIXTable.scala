@@ -2,7 +2,8 @@ package com.tsunderebug.scolor.otf.tables.color.apple
 
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.otf.tables.OpenTypeTable
-import com.tsunderebug.scolor.otf.types.{OTFArray, OTFUInt16, OTFUInt32}
+import com.tsunderebug.scolor.otf.types.OTFArray
+import com.tsunderebug.scolor.otf.types.num.{OTFUInt16, OTFUInt32}
 import com.tsunderebug.scolor.table.Section
 import spire.math.{UInt, UShort}
 

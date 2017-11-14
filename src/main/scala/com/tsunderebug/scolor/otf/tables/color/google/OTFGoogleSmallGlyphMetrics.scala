@@ -1,7 +1,7 @@
 package com.tsunderebug.scolor.otf.tables.color.google
 
 import com.tsunderebug.scolor.ByteAllocator
-import com.tsunderebug.scolor.otf.types.{OTFInt8, OTFUInt8}
+import com.tsunderebug.scolor.otf.types.num.{OTFInt8, OTFUInt8}
 import com.tsunderebug.scolor.table.Section
 import spire.math.{UByte, UInt}
 
