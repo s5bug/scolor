@@ -1,25 +1,25 @@
 package com.tsunderebug.scolor.helper
 
+import java.io.File
+import javax.xml.parsers.{DocumentBuilder, DocumentBuilderFactory}
+
 import org.scalameter.api._
+import org.w3c.dom.Document
 import spire.math.{UInt, UShort}
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Document;
-import java.io.File;
 
 
 /** Use ForkedTime because it's supposed to give better reproduceable results
  * @see https://scalameter.github.io/home/gettingstarted/0.7/configuration/index.html
  */
 object ColorEmojiFontPerformanceTest extends Bench.ForkedTime {
-	
-	val gen = Gen.unit("font")
+
+  val gen: Gen[Unit] = Gen.unit("font")
 
 	/* Preload the document because I assume that isn't part of what we're perf testing */
-	val svgFile = new File("src/test/resources/acid.svg");
-	val dbFactory = DocumentBuilderFactory.newInstance();
-	val dBuilder = dbFactory.newDocumentBuilder();
-	val doc = dBuilder.parse(svgFile);
+  val svgFile = new File("src/test/resources/acid.svg")
+  val dbFactory: DocumentBuilderFactory = DocumentBuilderFactory.newInstance()
+  val dBuilder: DocumentBuilder = dbFactory.newDocumentBuilder()
+  val doc: Document = dBuilder.parse(svgFile)
 
 	performance of "ColorEmojiFont" in {
 
