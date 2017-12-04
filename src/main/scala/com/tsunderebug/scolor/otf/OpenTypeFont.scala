@@ -4,6 +4,7 @@ import java.io.{File, FileOutputStream}
 import java.nio.{ByteBuffer, ByteOrder}
 
 import com.tsunderebug.scolor._
+import com.tsunderebug.scolor.otf.tables.OTFHEADTable
 import com.tsunderebug.scolor.otf.types.OTFOffset32
 import com.tsunderebug.scolor.table.Table
 import spire.math.{UByte, UInt, UShort}
@@ -14,7 +15,6 @@ import scala.collection.mutable.ListBuffer
 
 class OpenTypeFont(tables: Traversable[Table]) extends Font {
 
-  private val byteMap: mutable.Map[Offset, UByte] = mutable.Map()
   private val tableOffsMap: mutable.Map[Table, Offset] = mutable.Map()
 
   implicit def byteArrayToData(ba: Array[UByte]): Data = new Data {
@@ -73,6 +73,61 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
     b.insert(OTFOffset32(0), buff.toArray)
   }
 
+  def writeHeaderSecondPass(b: ByteAllocator, newHead: OTFHEADTable): Unit = {
+    tableOffsMap.clear()
+
+    def mPow2Shifts(i: Int): Int = {
+      var shifts = 0
+      while ((i & (Int.MaxValue << shifts)) != 0) {
+        shifts = shifts + 1
+      }
+      shifts
+    }
+
+    def mPow2Less(i: Int): Int = {
+      1 << (mPow2Shifts(i) - 1)
+    }
+
+    b.allocate(UInt(12))
+    val buff = ListBuffer[UByte]()
+    buff ++= "OTTO".getBytes.map(UByte(_))
+    buff ++= UShort(tables.size).bytes
+    val searchRange = mPow2Less(tables.size) * 16
+    buff ++= UShort(searchRange).bytes
+    buff ++= UShort(mPow2Shifts(tables.size)).bytes
+    buff ++= UShort(tables.size * 16 - searchRange).bytes
+    b.allocate(UInt(tables.size * 16))
+    tables.foreach((t) => {
+      if (t.name == "head") {
+        buff ++= newHead.name.getBytes.map(UByte(_))
+        val dataOffset = b.allocate(newHead)
+        tableOffsMap += (newHead -> dataOffset)
+        buff ++= t.bytes(b).checksum.bytes
+        buff ++= dataOffset.position.bytes
+        buff ++= newHead.length(b).bytes
+      } else {
+        buff ++= t.name.getBytes.map(UByte(_))
+        val dataOffset = b.allocate(t)
+        tableOffsMap += (t -> dataOffset)
+        val bytes = t.bytes(b)
+        buff ++= bytes.checksum.bytes
+        buff ++= dataOffset.position.bytes
+        buff ++= t.length(b).bytes
+      }
+    })
+    b.insert(OTFOffset32(0), buff.toArray)
+  }
+
+  def writeTablesSecondPass(b: ByteAllocator, newHead: OTFHEADTable): Unit = {
+    tableOffsMap.foreach((t) => {
+      if (t._1.name == "head") {
+        b.insert(newHead)
+      } else {
+        b.insert(t._1)
+      }
+    })
+  }
+
   override def writeFile(dir: File, name: String): Unit = {
     dir.mkdirs()
     val `Windows Font Tables` = tables.filter((t) => !Seq("sbix", "cbdt", "cblc").contains(t.name.toLowerCase))
@@ -128,7 +183,15 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
     val b: ByteAllocator = new OTFByteAllocator(this)
     writeHeader(b)
     writeTables(b)
-    b.getBytes
+    tables.find(_.name == "head") match {
+      case Some(t) =>
+        val nb: ByteAllocator = new OTFByteAllocator(this)
+        val newHead = t.asInstanceOf[OTFHEADTable].copy(checkSumAdjustment = UInt(0xB1B0AFBA - b.getBytes.checksum.signed))
+        writeHeaderSecondPass(nb, newHead)
+        writeTablesSecondPass(b, newHead)
+        nb.getBytes
+      case None => b.getBytes
+    }
   }
 
 }

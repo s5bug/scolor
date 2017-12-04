@@ -1,17 +1,22 @@
 package com.tsunderebug.scolor.helper
 
+import java.time.Instant
+
 import com.tsunderebug.scolor.Models.Codepoint
 import com.tsunderebug.scolor.otf.OpenTypeFont
 import com.tsunderebug.scolor.otf.tables.color.apple.{OTFAppleStrikeData, OTFSBIXTable}
 import com.tsunderebug.scolor.otf.tables.color.google.OTFCBDTTable
-import com.tsunderebug.scolor.otf.tables.{OTFCMAPTable, OTFNAMETable}
+import com.tsunderebug.scolor.otf.tables.os2.{OTFCodePageRange, OTFOS2Table, OTFPANOSEClassification, OTFUnicodeRange}
+import com.tsunderebug.scolor.otf.tables.{OTFCMAPTable, OTFHEADTable, OTFNAMETable}
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
 import com.tsunderebug.scolor.otf.types.{OTFEncodingRecord, OTFNameRecord, SequentialMapGroup}
-import spire.math.{UInt, UShort}
+import spire.math.{UByte, UInt, UShort}
 
 case class ColorEmojiFont(
                            pixelsPerEm: UShort,
                            internationalName: String,
+                           version: Double,
+                           created: Long,
                            entries: Map[Codepoint, ColorEmojiEntry]
                          ) extends
 
@@ -28,6 +33,64 @@ case class ColorEmojiFont(
             content = internationalName
           )
         )
+      ),
+      OTFHEADTable(
+        version,
+        UShort(0),
+        UShort(256),
+        created,
+        Instant.now().getEpochSecond,
+        0, 0, 256, 256,
+        UShort(0),
+        UShort(8),
+        1
+      ),
+      OTFOS2Table(
+        256,
+        UShort(400),
+        UShort(5),
+        UShort(0),
+        128,
+        128,
+        0,
+        -64,
+        128,
+        128,
+        0,
+        192,
+        256,
+        128,
+        0,
+        OTFPANOSEClassification(
+          UByte(0),
+          UByte(0),
+          UByte(0),
+          UByte(0),
+          UByte(0),
+          UByte(0),
+          UByte(0),
+          UByte(0),
+          UByte(0),
+          UByte(0)
+        ),
+        new OTFUnicodeRange.OTFUnicodeRangeFlag,
+        internationalName.toLowerCase,
+        UShort(1 << 6),
+        UShort(0xFFFF),
+        UShort(0xFFFF),
+        0,
+        0,
+        0,
+        UShort(256),
+        UShort(-0),
+        new OTFCodePageRange.OTFCodePageRangeFlag,
+        0,
+        0,
+        UShort(0),
+        UShort(0),
+        UShort(0),
+        UShort(0),
+        UShort(0)
       ),
       OTFCMAPTable(
         Seq(
