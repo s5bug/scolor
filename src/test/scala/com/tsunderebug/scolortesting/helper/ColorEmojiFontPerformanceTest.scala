@@ -31,6 +31,8 @@ object ColorEmojiFontPerformanceTest extends Bench.ForkedTime {
 				ColorEmojiFont(
 				  UShort(32),
 				  "test",
+					1.0,
+					System.currentTimeMillis(),
 				  Map(
 				    UInt("A".charAt(0).toInt) -> ColorEmojiEntry(doc, Map())
 				  )
