@@ -1,15 +1,14 @@
 package com.tsunderebug.scolor.helper
 
 import java.awt.image.BufferedImage
-import java.io.{ByteArrayInputStream, StringWriter}
+import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
 
+import com.tsunderebug.scolor.StringableDocument
 import com.tsunderebug.scolor.otf.tables.color.OTFsRGBPNG
 import com.tsunderebug.scolor.otf.tables.color.apple.OTFAppleGlyphData
 import com.tsunderebug.scolor.otf.tables.color.google.{OTFGoogleGlyphData, OTFGoogleSmallGlyphMetrics}
+import com.tsunderebug.scolor.otf.tables.color.svg.OTFSVGDocument
 import org.w3c.dom.Document
 import spire.math.UByte
 
@@ -52,24 +51,9 @@ case class ColorEmojiEntry(main: Document, subs: Map[String, Document]) {
     }
   }
 
-  def toScalable: Map[String, _] = { // TODO make Tuple for SVG/COLR data
-
-
-    Map() // TODO When SVG and COLR tables are worked on
-  }
-
-  implicit class StringableDocument(d: Document) {
-
-    def toXmlString: String = {
-      val domSource = new DOMSource(d)
-      val writer = new StringWriter
-      val result = new StreamResult(writer)
-      val tf = TransformerFactory.newInstance
-      val transformer = tf.newTransformer
-      transformer.transform(domSource, result)
-      writer.toString
-    }
-
+  def toScalable: Map[String, OTFSVGDocument] = {
+    val a = subs + ("" -> main)
+    a.mapValues(OTFSVGDocument)
   }
 
 }

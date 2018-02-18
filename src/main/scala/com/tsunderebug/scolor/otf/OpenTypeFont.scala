@@ -130,7 +130,7 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
 
   override def writeFile(dir: File, name: String): Unit = {
     dir.mkdirs()
-    val `Windows Font Tables` = tables.filter((t) => !Seq("sbix", "cbdt", "cblc").contains(t.name.toLowerCase))
+    val `Windows Font Tables` = tables.filter((t) => !Seq("cbdt", "cblc").contains(t.name.toLowerCase))
     val `Mac Font Tables` = tables.filter((t) => !Seq("colr", "cpal", "cbdt", "cblc").contains(t.name.toLowerCase))
     val `Linux Font Tables` = tables.filter((t) => !Seq("sbix", "colr", "cpal").contains(t.name.toLowerCase))
     val winFont = new OpenTypeFont(`Windows Font Tables`)

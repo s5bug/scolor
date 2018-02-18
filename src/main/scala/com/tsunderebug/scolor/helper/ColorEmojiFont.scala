@@ -6,9 +6,11 @@ import com.tsunderebug.scolor.Models.Codepoint
 import com.tsunderebug.scolor.otf.OpenTypeFont
 import com.tsunderebug.scolor.otf.tables.color.apple.{OTFAppleStrikeData, OTFSBIXTable}
 import com.tsunderebug.scolor.otf.tables.color.google.OTFCBDTTable
+import com.tsunderebug.scolor.otf.tables.color.svg.{OTFSVGDocumentIndex, OTFSVGDocumentIndexEntry, OTFSVGTable}
 import com.tsunderebug.scolor.otf.tables.os2.{OTFCodePageRange, OTFOS2Table, OTFPANOSEClassification, OTFUnicodeRange}
 import com.tsunderebug.scolor.otf.tables.{OTFCMAPTable, OTFHEADTable, OTFNAMETable}
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
+import com.tsunderebug.scolor.otf.types.num.OTFUInt16
 import com.tsunderebug.scolor.otf.types.{OTFEncodingRecord, OTFNameRecord, SequentialMapGroup}
 import spire.math.{UByte, UInt, UShort}
 
@@ -121,6 +123,21 @@ case class ColorEmojiFont(
       ),
       OTFSBIXTable(
         Seq(OTFAppleStrikeData(pixelsPerEm, UShort(300), entries.values.flatMap(_.bitmaps.values.map(_._2))))
+      ),
+      OTFSVGTable(
+        OTFSVGDocumentIndex(
+          entries.values.flatMap {
+            entry =>
+              entry.toScalable.values.zipWithIndex.map {
+                case (doc, index) =>
+                  OTFSVGDocumentIndexEntry(
+                    OTFUInt16(UShort(index)),
+                    OTFUInt16(UShort(index)),
+                    doc
+                  )
+              }
+          }
+        )
       )
     )
   )
