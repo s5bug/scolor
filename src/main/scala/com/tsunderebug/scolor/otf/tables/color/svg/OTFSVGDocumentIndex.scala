@@ -31,6 +31,9 @@ case class OTFSVGDocumentIndex(
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def data(b: ByteAllocator): Traversable[Data] = Seq()
+  override def data(b: ByteAllocator): Traversable[Data] = {
+    println("did")
+    Seq()
+  }
 
 }

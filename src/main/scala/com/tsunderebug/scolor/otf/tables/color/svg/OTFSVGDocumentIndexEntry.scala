@@ -6,12 +6,12 @@ import com.tsunderebug.scolor.otf.types.num.{OTFUInt16, OTFUInt32}
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, RequireEnclosingSectionDataType, Section}
 import spire.math.UInt
 
-private case class DatadOTFSVGDocumentIndexEntry(
+case class DatadOTFSVGDocumentIndexEntry(
                                           documentIndex: OTFSVGDocumentIndex,
                                           startGlyphID: OTFUInt16,
                                           endGlyphID: OTFUInt16,
                                           svgDocument: OTFSVGDocument
-                                   ) extends EnclosingSectionDataType {
+                                        ) extends EnclosingSectionDataType {
 
   override def sections(b: ByteAllocator): Traversable[Section] = Seq(
     Section("startGlyphID", startGlyphID),
@@ -30,7 +30,7 @@ private case class DatadOTFSVGDocumentIndexEntry(
     * @param b The byte allocator
     * @return an unsigned integer describing the length of this data block
     */
-  override def length(b: ByteAllocator): UInt = UInt(8) + svgDocument.length(b)
+  override def length(b: ByteAllocator): UInt = UInt(8)
 
   /**
     * Gets data sections if this data block has offsets. Used for if data needs to be allocated but can be in any location.
@@ -38,7 +38,10 @@ private case class DatadOTFSVGDocumentIndexEntry(
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def data(b: ByteAllocator): Traversable[Data] = Seq(svgDocument)
+  override def data(b: ByteAllocator): Traversable[Data] = {
+    println("svgd")
+    Seq(svgDocument)
+  }
 
 }
 

@@ -17,7 +17,7 @@ abstract class ByteAllocator {
     *
     * @param data The data
     */
-  def insert(data: Data): Unit = insert(nextOffset, data)
+  def insert(data: Data): Unit = insert(allocate(data), data)
 
   /**
     * Allocate an offset for a number of bytes.

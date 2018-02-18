@@ -33,9 +33,14 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
 
   }
 
+  def writeDataRecursively(b: ByteAllocator, d: Data): Unit = {
+    b.insert(d)
+    d.data(b).foreach((c) => writeDataRecursively(b, c))
+  }
+
   def writeTables(b: ByteAllocator): Unit = {
     tableOffsMap.foreach((t) => {
-      b.insert(t._1)
+      writeDataRecursively(b, t._1)
     })
   }
 
@@ -109,8 +114,7 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
         buff ++= t.name.getBytes.map(UByte(_))
         val dataOffset = b.allocate(t)
         tableOffsMap += (t -> dataOffset)
-        val bytes = t.bytes(b)
-        buff ++= bytes.checksum.bytes
+        buff ++= t.bytes(b).checksum.bytes
         buff ++= dataOffset.position.bytes
         buff ++= t.length(b).bytes
       }
@@ -121,9 +125,9 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
   def writeTablesSecondPass(b: ByteAllocator, newHead: OTFHEADTable): Unit = {
     tableOffsMap.foreach((t) => {
       if (t._1.name == "head") {
-        b.insert(newHead)
+        writeDataRecursively(b, newHead)
       } else {
-        b.insert(t._1)
+        writeDataRecursively(b, t._1)
       }
     })
   }
@@ -188,7 +192,7 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
         val nb: ByteAllocator = new OTFByteAllocator(this)
         val newHead = t.asInstanceOf[OTFHEADTable].copy(checkSumAdjustment = UInt(0xB1B0AFBA - b.getBytes.checksum.signed))
         writeHeaderSecondPass(nb, newHead)
-        writeTablesSecondPass(b, newHead)
+        writeTablesSecondPass(nb, newHead)
         nb.getBytes
       case None => b.getBytes
     }

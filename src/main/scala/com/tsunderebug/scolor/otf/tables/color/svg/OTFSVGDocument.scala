@@ -23,7 +23,11 @@ case class OTFSVGDocument(
     * @param b The byte allocator
     * @return an array of unsigned bytes representing the font data.
     */
-  override def bytes(b: ByteAllocator): Array[UByte] = svg.toXmlString.getBytes.map(UByte(_))
+  override def bytes(b: ByteAllocator): Array[UByte] = {
+    val bs = svg.toXmlString.getBytes("UTF-8").map(UByte(_))
+    println(bs.grouped(16).map((r) => r.map(_.toLong.toHexString.reverse.padTo(2, '0').reverse).mkString(" ")).mkString("\n"))
+    bs
+  }
 
   /**
     * Gets data sections if this data block has offsets. Used for if data needs to be allocated but can be in any location.

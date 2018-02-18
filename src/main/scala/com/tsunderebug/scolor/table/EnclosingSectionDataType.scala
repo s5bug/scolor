@@ -10,6 +10,6 @@ abstract class EnclosingSectionDataType extends SectionDataType {
 
   def sections(b: ByteAllocator): Traversable[Section]
 
-  override def bytes(b: ByteAllocator): Array[UByte] = sections(b).flatMap(_.getBytes(b)).toArray
+  override def bytes(b: ByteAllocator): Array[UByte] = sections(b).flatMap(_.bytes(b)).toArray
 
 }
