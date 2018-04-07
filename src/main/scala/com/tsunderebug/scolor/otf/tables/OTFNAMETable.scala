@@ -20,15 +20,15 @@ case class OTFNAMETable(
     val tabeledRecordsSum = tabeledRecords.foldLeft(UInt(0)) {
       case (accum, tabledRecord) => accum + tabledRecord.length(b)
     }
-    val dataOff = off.position + UInt(6) + tabeledRecordsSum
     Seq(
       Section("format", OTFUInt16(UShort(0))),
       Section("count", OTFUInt16(UShort(records.size))),
-      Section("stringOffset", OTFOffset16(6 + tabeledRecordsSum.toInt)),
-      Section("nameRecords", OTFArray(tabeledRecords)),
-      Section("data", strData)
+      Section("stringOffset", OTFOffset16((b.allocate(strData).position - off.position).toInt)),
+      Section("nameRecords", OTFArray(tabeledRecords))
     )
   }
+
+
 
   override def length(b: ByteAllocator): UInt = {
     records.foldLeft(UInt(6) + strData.length(b)) { // 6 is the length of the data in bytes before the record data
@@ -42,6 +42,6 @@ case class OTFNAMETable(
     * @param b The byte allocator
     * @return an array of Data objects
     */
-  override def data(b: ByteAllocator): Traversable[Data] = Seq()
+  override def data(b: ByteAllocator): Traversable[Data] = Seq(strData)
 
 }
