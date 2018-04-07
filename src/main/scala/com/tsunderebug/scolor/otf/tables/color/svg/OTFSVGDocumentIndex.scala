@@ -32,8 +32,7 @@ case class OTFSVGDocumentIndex(
     * @return an array of Data objects
     */
   override def data(b: ByteAllocator): Traversable[Data] = {
-    println("did")
-    Seq()
+    mappedEntries
   }
 
 }

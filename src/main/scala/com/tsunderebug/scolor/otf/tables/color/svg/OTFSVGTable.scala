@@ -25,9 +25,7 @@ case class OTFSVGTable(
     Section("svgDocIndexOffset", OTFOffset32({
       val myOffset = b.allocate(this)
       val indOffset = b.allocate(documentIndex)
-      val l = (indOffset.position - myOffset.position).toLong
-      println(s"svto: $l")
-      l
+      (indOffset.position - myOffset.position).toLong
     })),
     Section("reserved", OTFUInt32(UInt(0)))
   )

@@ -25,7 +25,6 @@ case class OTFSVGDocument(
     */
   override def bytes(b: ByteAllocator): Array[UByte] = {
     val bs = svg.toXmlString.getBytes("UTF-8").map(UByte(_))
-    println(bs.grouped(16).map((r) => r.map(_.toLong.toHexString.reverse.padTo(2, '0').reverse).mkString(" ")).mkString("\n"))
     bs
   }
 

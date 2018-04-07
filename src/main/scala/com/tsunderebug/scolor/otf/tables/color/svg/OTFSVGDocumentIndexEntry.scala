@@ -39,7 +39,6 @@ case class DatadOTFSVGDocumentIndexEntry(
     * @return an array of Data objects
     */
   override def data(b: ByteAllocator): Traversable[Data] = {
-    println("svgd")
     Seq(svgDocument)
   }
 
