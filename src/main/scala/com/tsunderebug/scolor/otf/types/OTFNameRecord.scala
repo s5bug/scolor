@@ -23,7 +23,7 @@ private[scolor] class TabledNameRecord(
     Section("languageID", OTFUInt16(languageID)),
     Section("nameID", OTFUInt16(nameID)),
     Section("length", OTFUInt16(UShort(data.length(b).toShort))),
-    Section("offset", OTFOffset16((b.allocate(data).position - b.allocate(table).position).toInt + 5 + table.records.map(_.apply(table).length(b)).toArray.qsum.toInt))
+    Section("offset", OTFOffset16((b.allocate(data).position - b.allocate(table.strData).position).toInt))
   )
 
   override def length(b: ByteAllocator): UInt = UInt(12)
