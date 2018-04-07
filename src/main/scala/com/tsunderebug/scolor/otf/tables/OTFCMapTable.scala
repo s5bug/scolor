@@ -6,7 +6,7 @@ import com.tsunderebug.scolor.otf.types.{OTFArray, OTFEncodingRecord, TabledEnco
 import com.tsunderebug.scolor.table.Section
 import spire.math.{UInt, UShort}
 
-case class OTFCMAPTable(
+case class OTFCMapTable(
                          encodingRecords: Traversable[OTFEncodingRecord]
                        ) extends OpenTypeTable {
 

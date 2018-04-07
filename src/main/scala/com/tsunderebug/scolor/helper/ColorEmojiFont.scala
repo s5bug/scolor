@@ -7,8 +7,8 @@ import com.tsunderebug.scolor.otf.OpenTypeFont
 import com.tsunderebug.scolor.otf.tables.color.apple.{OTFAppleStrikeData, OTFSBIXTable}
 import com.tsunderebug.scolor.otf.tables.color.google.OTFCBDTTable
 import com.tsunderebug.scolor.otf.tables.color.svg.{OTFSVGDocumentIndex, OTFSVGDocumentIndexEntry, OTFSVGTable}
-import com.tsunderebug.scolor.otf.tables.os2.{OTFCodePageRange, OTFOS2Table, OTFPANOSEClassification, OTFUnicodeRange}
-import com.tsunderebug.scolor.otf.tables.{OTFCMAPTable, OTFHEADTable, OTFNAMETable}
+import com.tsunderebug.scolor.otf.tables.os2.{OTFCodePageRange, OTFOS2Table, OTFPanoseClassification, OTFUnicodeRange}
+import com.tsunderebug.scolor.otf.tables.{OTFCMapTable, OTFHeadTable, OTFNameTable}
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
 import com.tsunderebug.scolor.otf.types.num.OTFUInt16
 import com.tsunderebug.scolor.otf.types.{OTFEncodingRecord, OTFNameRecord, SequentialMapGroup}
@@ -24,7 +24,7 @@ case class ColorEmojiFont(
 
   OpenTypeFont(
     Seq(
-      OTFNAMETable(
+      OTFNameTable(
         Seq(
           OTFNameRecord(
             d = WindowsLanguage.`English`.`United States`,
@@ -36,7 +36,7 @@ case class ColorEmojiFont(
           )
         )
       ),
-      OTFHEADTable(
+      OTFHeadTable(
         version,
         UShort(0),
         UShort(256),
@@ -63,7 +63,7 @@ case class ColorEmojiFont(
         256,
         128,
         0,
-        OTFPANOSEClassification(
+        OTFPanoseClassification(
           UByte(5),
           UByte(0),
           UByte(1),
@@ -94,7 +94,7 @@ case class ColorEmojiFont(
         UShort(0),
         UShort(0)
       ),
-      OTFCMAPTable(
+      OTFCMapTable(
         Seq(
           OTFEncodingRecord(
             UShort(3),

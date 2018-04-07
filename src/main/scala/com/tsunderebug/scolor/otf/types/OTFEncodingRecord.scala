@@ -2,7 +2,7 @@ package com.tsunderebug.scolor.otf.types
 
 import com.tsunderebug.scolor.Models.{Codepoint, GlyphID}
 import com.tsunderebug.scolor._
-import com.tsunderebug.scolor.otf.tables.OTFCMAPTable
+import com.tsunderebug.scolor.otf.tables.OTFCMapTable
 import com.tsunderebug.scolor.otf.types.OTFEncodingRecord.EncodingFormat
 import com.tsunderebug.scolor.otf.types.num.{OTFUInt16, OTFUInt32}
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, RequireTable, Section}
@@ -10,7 +10,7 @@ import spire.math.{UInt, UShort}
 
 import scala.math.Ordered
 
-private[scolor] class TabledEncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat, table: OTFCMAPTable) extends EnclosingSectionDataType {
+private[scolor] class TabledEncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat, table: OTFCMapTable) extends EnclosingSectionDataType {
 
   override def sections(b: ByteAllocator): Traversable[Section] = Seq(
     Section("platformID", OTFUInt16(platformID)),
@@ -24,9 +24,9 @@ private[scolor] class TabledEncodingRecord(platformID: UShort, encodingID: UShor
 
 }
 
-case class OTFEncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat) extends RequireTable[OTFCMAPTable, TabledEncodingRecord] {
+case class OTFEncodingRecord(platformID: UShort, encodingID: UShort, encodingFormat: EncodingFormat) extends RequireTable[OTFCMapTable, TabledEncodingRecord] {
 
-  override def apply(t: OTFCMAPTable): TabledEncodingRecord = new TabledEncodingRecord(platformID, encodingID, encodingFormat, t)
+  override def apply(t: OTFCMapTable): TabledEncodingRecord = new TabledEncodingRecord(platformID, encodingID, encodingFormat, t)
 
 }
 

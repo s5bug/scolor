@@ -1,6 +1,6 @@
 package com.tsunderebug.scolor.otf.types
 
-import com.tsunderebug.scolor.otf.tables.OTFNAMETable
+import com.tsunderebug.scolor.otf.tables.OTFNameTable
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
 import com.tsunderebug.scolor.otf.types.num.OTFUInt16
 import com.tsunderebug.scolor.table._
@@ -14,7 +14,7 @@ private[scolor] class TabledNameRecord(
                                         languageID: UShort,
                                         nameID: UShort,
                                         val data: OTFString,
-                                        table: OTFNAMETable
+                                        table: OTFNameTable
                                       ) extends EnclosingSectionDataType {
 
   override def sections(b: ByteAllocator): Traversable[Section] = Seq(
@@ -44,9 +44,9 @@ case class OTFNameRecord(
                           languageID: UShort,
                           nameID: NameID,
                           data: OTFString
-                        ) extends RequireTable[OTFNAMETable, TabledNameRecord] {
+                        ) extends RequireTable[OTFNameTable, TabledNameRecord] {
 
-  override def apply(t: OTFNAMETable) = new TabledNameRecord(platformID, encodingID, languageID, nameID.id, data, t)
+  override def apply(t: OTFNameTable) = new TabledNameRecord(platformID, encodingID, languageID, nameID.id, data, t)
 
 }
 

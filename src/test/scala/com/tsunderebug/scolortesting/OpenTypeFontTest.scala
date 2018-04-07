@@ -1,7 +1,7 @@
 package com.tsunderebug.scolortesting
 
 import com.tsunderebug.scolor.otf.OpenTypeFont
-import com.tsunderebug.scolor.otf.tables.OTFNAMETable
+import com.tsunderebug.scolor.otf.tables.OTFNameTable
 import com.tsunderebug.scolor.otf.types.OTFNameRecord
 import com.tsunderebug.scolor.otf.types.gen.{MacLanguage, WindowsLanguage}
 import org.scalatest.FlatSpec
@@ -33,7 +33,7 @@ class OpenTypeFontTest extends FlatSpec {
     val openTypeFontString =
       new OpenTypeFont(
         Seq(
-          OTFNAMETable(
+          OTFNameTable(
             Seq(
               OTFNameRecord(d = WindowsLanguage.`English`.`United States`, content = "Hello World"),
               OTFNameRecord(d = WindowsLanguage.`Dutch`.`Netherlands`, content = "Hallo Wereld"),

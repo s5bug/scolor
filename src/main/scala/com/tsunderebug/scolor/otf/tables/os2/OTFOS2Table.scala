@@ -23,7 +23,7 @@ case class OTFOS2Table(
                         yStrikeoutSize: Short,
                         yStrikeoutPosition: Short,
                         sFamilyClass: Short,
-                        panose: OTFPANOSEClassification,
+                        panose: OTFPanoseClassification,
                         ulUnicodeRange: OTFUnicodeRange.OTFUnicodeRangeFlag,
                         private val _tag: String,
                         fsSelection: UShort,

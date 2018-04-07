@@ -6,7 +6,7 @@ import com.tsunderebug.scolor.table.SectionDataType
 import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UByte, UInt}
 
-case class OTFPANOSEClassification(
+case class OTFPanoseClassification(
                                     bFamilyType: UByte,
                                     bSerifStyle: UByte,
                                     bWeight: UByte,

@@ -4,7 +4,7 @@ import java.io.{File, FileOutputStream}
 import java.nio.{ByteBuffer, ByteOrder}
 
 import com.tsunderebug.scolor._
-import com.tsunderebug.scolor.otf.tables.OTFHEADTable
+import com.tsunderebug.scolor.otf.tables.OTFHeadTable
 import com.tsunderebug.scolor.otf.types.OTFOffset32
 import com.tsunderebug.scolor.table.Table
 import spire.math.{UByte, UInt, UShort}
@@ -78,7 +78,7 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
     b.insert(OTFOffset32(0), buff.toArray)
   }
 
-  def writeHeaderSecondPass(b: ByteAllocator, newHead: OTFHEADTable): Unit = {
+  def writeHeaderSecondPass(b: ByteAllocator, newHead: OTFHeadTable): Unit = {
     tableOffsMap.clear()
 
     def mPow2Shifts(i: Int): Int = {
@@ -122,7 +122,7 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
     b.insert(OTFOffset32(0), buff.toArray)
   }
 
-  def writeTablesSecondPass(b: ByteAllocator, newHead: OTFHEADTable): Unit = {
+  def writeTablesSecondPass(b: ByteAllocator, newHead: OTFHeadTable): Unit = {
     tableOffsMap.foreach((t) => {
       if (t._1.name == "head") {
         writeDataRecursively(b, newHead)
@@ -190,7 +190,7 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
     tables.find(_.name == "head") match {
       case Some(t) =>
         val nb: ByteAllocator = new OTFByteAllocator(this)
-        val newHead = t.asInstanceOf[OTFHEADTable].copy(checkSumAdjustment = UInt(0xB1B0AFBA - b.getBytes.checksum.signed))
+        val newHead = t.asInstanceOf[OTFHeadTable].copy(checkSumAdjustment = UInt(0xB1B0AFBA - b.getBytes.checksum.signed))
         writeHeaderSecondPass(nb, newHead)
         writeTablesSecondPass(nb, newHead)
         nb.getBytes

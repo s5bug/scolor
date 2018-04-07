@@ -6,7 +6,7 @@ import com.tsunderebug.scolor.table.Section
 import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
 
-case class OTFNAMETable(
+case class OTFNameTable(
                          records: Traversable[OTFNameRecord]
                        ) extends OpenTypeTable {
 

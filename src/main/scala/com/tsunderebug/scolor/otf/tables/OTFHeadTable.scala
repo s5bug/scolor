@@ -8,7 +8,7 @@ import com.tsunderebug.scolor.table.Section
 import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
 
-case class OTFHEADTable(
+case class OTFHeadTable(
                          fontRevision: Double,
                          flags: UShort,
                          unitsPerEm: UShort,
@@ -24,8 +24,8 @@ case class OTFHEADTable(
                          checkSumAdjustment: UInt = UInt(0)
                        ) extends OpenTypeTable {
 
-  val created: Long = OTFHEADTable.timeOffset + _created
-  val modified: Long = OTFHEADTable.timeOffset + _modified
+  val created: Long = OTFHeadTable.timeOffset + _created
+  val modified: Long = OTFHeadTable.timeOffset + _modified
 
   /**
     * @return the table tag/name/identifier
@@ -74,7 +74,7 @@ case class OTFHEADTable(
 
 }
 
-object OTFHEADTable {
+object OTFHeadTable {
 
   val timeOffset: Long = -LocalDateTime.of(1904, 1, 1, 0, 0, 0, 0).toEpochSecond(ZoneOffset.UTC)
 
