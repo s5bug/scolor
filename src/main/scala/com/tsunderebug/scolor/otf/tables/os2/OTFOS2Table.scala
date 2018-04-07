@@ -55,6 +55,7 @@ case class OTFOS2Table(
     * @return the sections/partitions/rows of a table
     */
   override def sections(b: ByteAllocator): Traversable[Section] = Seq(
+    Section("version", OTFUInt16(UShort(5))),
     Section("xAvgCharWidth", OTFInt16(xAvgCharWidth)),
     Section("usWeightClass", OTFUInt16(usWeightClass)),
     Section("usWidthClass", OTFUInt16(usWidthClass)),
