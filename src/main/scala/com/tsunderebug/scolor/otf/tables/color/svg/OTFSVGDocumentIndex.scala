@@ -2,8 +2,8 @@ package com.tsunderebug.scolor.otf.tables.color.svg
 
 import com.tsunderebug.scolor.otf.types.OTFArray
 import com.tsunderebug.scolor.otf.types.num.OTFUInt16
-import com.tsunderebug.scolor.{ByteAllocator, Data}
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, Section}
+import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
 
 case class OTFSVGDocumentIndex(

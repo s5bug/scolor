@@ -2,10 +2,10 @@ package com.tsunderebug.scolor.otf.tables.color
 
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
-import javax.imageio.ImageIO
 
 import com.tsunderebug.scolor.ByteAllocator
 import com.tsunderebug.scolor.table.SectionDataType
+import javax.imageio.ImageIO
 import spire.math.{UByte, UInt}
 
 case class OTFsRGBPNG(i: BufferedImage) extends SectionDataType {

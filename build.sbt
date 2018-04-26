@@ -4,7 +4,7 @@ val imageIOVersion = settingKey[String]("ImageIO Version")
 lazy val root = (project in file(".")).settings(
   name := "Scolor",
   version := "0.1",
-  scalaVersion := "2.12.4",
+  scalaVersion := "2.12.5",
   batikVersion := "1.9.1",
   imageIOVersion := "3.3.2",
   libraryDependencies ++= Seq(
@@ -17,7 +17,7 @@ lazy val root = (project in file(".")).settings(
     "com.twelvemonkeys.imageio" % "imageio-core" % imageIOVersion.value,
     "com.twelvemonkeys.imageio" % "imageio-metadata" % imageIOVersion.value,
     "com.twelvemonkeys.common" % "common-lang" % imageIOVersion.value,
-    "org.scalatest" %% "scalatest" % "3.0.0" % "test",
+    "org.scalatest" %% "scalatest" % "3.0.5" % "test",
     "com.storm-enroute" %% "scalameter" % "0.8.2" % "test"
   ),
   testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework"),

@@ -172,17 +172,6 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
 
   }
 
-  /** Writes bytes to a file without leaving resources open on failure */
-  private def safeCreateAndWrite(file: File, uBytes: => Array[UByte]): Unit = {
-    file.createNewFile()
-    val fileOutputStream = new FileOutputStream(file, false)
-    try {
-      fileOutputStream.write(uBytes.map(_.toByte))
-    } finally {
-      fileOutputStream.close()
-    }
-  }
-
   override def getBytes: Array[UByte] = {
     val b: ByteAllocator = new OTFByteAllocator(this)
     writeHeader(b)
@@ -195,6 +184,17 @@ class OpenTypeFont(tables: Traversable[Table]) extends Font {
         writeTablesSecondPass(nb, newHead)
         nb.getBytes
       case None => b.getBytes
+    }
+  }
+
+  /** Writes bytes to a file without leaving resources open on failure */
+  private def safeCreateAndWrite(file: File, uBytes: => Array[UByte]): Unit = {
+    file.createNewFile()
+    val fileOutputStream = new FileOutputStream(file, false)
+    try {
+      fileOutputStream.write(uBytes.map(_.toByte))
+    } finally {
+      fileOutputStream.close()
     }
   }
 

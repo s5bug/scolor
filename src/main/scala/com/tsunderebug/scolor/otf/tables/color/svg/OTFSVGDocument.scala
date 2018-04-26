@@ -1,7 +1,6 @@
 package com.tsunderebug.scolor.otf.tables.color.svg
 
-import com.tsunderebug.scolor.StringableDocument
-import com.tsunderebug.scolor.{ByteAllocator, Data}
+import com.tsunderebug.scolor.{ByteAllocator, Data, StringableDocument}
 import org.w3c.dom.Document
 import spire.math.{UByte, UInt}
 

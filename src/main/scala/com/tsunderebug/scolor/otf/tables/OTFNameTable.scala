@@ -10,16 +10,13 @@ case class OTFNameTable(
                          records: Traversable[OTFNameRecord]
                        ) extends OpenTypeTable {
 
-  override def name = "name"
-
   val strData = OTFArray(records.map((r) => OTFString(r.data.s)))
   private val tabeledRecords = records.map(_ (this))
 
+  override def name = "name"
+
   override def sections(b: ByteAllocator): Traversable[Section] = {
     val off = b.allocate(this)
-    val tabeledRecordsSum = tabeledRecords.foldLeft(UInt(0)) {
-      case (accum, tabledRecord) => accum + tabledRecord.length(b)
-    }
     Seq(
       Section("format", OTFUInt16(UShort(0))),
       Section("count", OTFUInt16(UShort(records.size))),
@@ -27,7 +24,6 @@ case class OTFNameTable(
       Section("nameRecords", OTFArray(tabeledRecords))
     )
   }
-
 
 
   override def length(b: ByteAllocator): UInt = {

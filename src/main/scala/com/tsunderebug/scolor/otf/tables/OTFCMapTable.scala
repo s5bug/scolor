@@ -10,21 +10,21 @@ case class OTFCMapTable(
                          encodingRecords: Traversable[OTFEncodingRecord]
                        ) extends OpenTypeTable {
 
-  override def name = "cmap"
-
   private val tabledRecords: Traversable[TabledEncodingRecord] = encodingRecords.map(_ (this))
 
-  override def sections(b: ByteAllocator): Traversable[Section] = Seq(
-    Section("version", OTFUInt16(UShort(0))),
-    Section("numTables", OTFUInt16(UShort(encodingRecords.size))),
-    Section("data", OTFArray(tabledRecords))
-  )
+  override def name = "cmap"
 
   override def length(b: ByteAllocator): UInt = {
     sections(b).foldLeft(UInt(0)) {
       case (accum, section) => accum + section.data.length(b)
     }
   }
+
+  override def sections(b: ByteAllocator): Traversable[Section] = Seq(
+    Section("version", OTFUInt16(UShort(0))),
+    Section("numTables", OTFUInt16(UShort(encodingRecords.size))),
+    Section("data", OTFArray(tabledRecords))
+  )
 
   /**
     * Gets data sections if this data block has offsets

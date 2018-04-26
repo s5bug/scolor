@@ -10,7 +10,7 @@ import spire.syntax.std.array._
 
 case class OTFCBDTTable(
                          gds: Traversable[OTFGoogleGlyphData]
-                  ) extends OpenTypeTable {
+                       ) extends OpenTypeTable {
 
   override def name = "CBDT"
 

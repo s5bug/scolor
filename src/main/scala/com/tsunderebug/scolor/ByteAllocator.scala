@@ -19,6 +19,8 @@ abstract class ByteAllocator {
     */
   def insert(data: Data): Unit = insert(allocate(data), data)
 
+  def allocate(data: Data): Offset = allocate(data, data.length(this))
+
   /**
     * Allocate an offset for a number of bytes.
     *
@@ -28,8 +30,6 @@ abstract class ByteAllocator {
   def allocate(numBytes: UInt): Offset
 
   def allocate(data: Data, numBytes: UInt): Offset
-
-  def allocate(data: Data): Offset = allocate(data, data.length(this))
 
   def nextOffset: Offset
 

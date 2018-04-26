@@ -1,9 +1,9 @@
 package com.tsunderebug.scolor.otf.tables.color.svg
 
 import com.tsunderebug.scolor.otf.types.OTFOffset32
-import com.tsunderebug.scolor.{ByteAllocator, Data}
 import com.tsunderebug.scolor.otf.types.num.{OTFUInt16, OTFUInt32}
 import com.tsunderebug.scolor.table.{EnclosingSectionDataType, RequireEnclosingSectionDataType, Section}
+import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.UInt
 
 case class DatadOTFSVGDocumentIndexEntry(

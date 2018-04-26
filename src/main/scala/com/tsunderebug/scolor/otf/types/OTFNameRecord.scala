@@ -6,7 +6,6 @@ import com.tsunderebug.scolor.otf.types.num.OTFUInt16
 import com.tsunderebug.scolor.table._
 import com.tsunderebug.scolor.{ByteAllocator, Data}
 import spire.math.{UInt, UShort}
-import spire.syntax.std.array._
 
 private[scolor] class TabledNameRecord(
                                         platformID: UShort,
@@ -59,9 +58,9 @@ object OTFNameRecord {
 
   def apply(d: MacLanguage, content: String): OTFNameRecord = OTFNameRecord(FullName, d.script, d.language, content, macString = true)
 
-  def apply(nameID: NameID, d: MacLanguage, content: String): OTFNameRecord = OTFNameRecord(nameID, d.script, d.language, content, macString = true)
-
   def apply(nameID: NameID, script: UShort, language: UShort, content: String, macString: Boolean): OTFNameRecord = OTFNameRecord(UShort(1), script, language, nameID, if (macString) new OTFMacString(content) else OTFString(content))
+
+  def apply(nameID: NameID, d: MacLanguage, content: String): OTFNameRecord = OTFNameRecord(nameID, d.script, d.language, content, macString = true)
 
 }
 

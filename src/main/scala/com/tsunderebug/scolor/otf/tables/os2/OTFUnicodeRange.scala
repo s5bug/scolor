@@ -12,6 +12,8 @@ object OTFUnicodeRange {
       override def flag: BigInt = OTFUnicodeRangeFlag.this.flag | other.flag
     }
 
+    def flag: BigInt = 0
+
     /**
       * @param b The byte allocator
       * @return an array of unsigned bytes representing the data.
@@ -21,8 +23,6 @@ object OTFUnicodeRange {
       bs.zipWithIndex.filter(_._1).foreach { case (_, bit) => flag = flag | UByte(1 << bit) }
       flag
     })
-
-    def flag: BigInt = 0
 
     /**
       * Calculate/retrieve/return length in bytes of this data. Useful for if data needs to be allocated before it is calculated.

@@ -2,13 +2,13 @@ package com.tsunderebug.scolor.helper
 
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
-import javax.imageio.ImageIO
 
 import com.tsunderebug.scolor.StringableDocument
 import com.tsunderebug.scolor.otf.tables.color.OTFsRGBPNG
 import com.tsunderebug.scolor.otf.tables.color.apple.OTFAppleGlyphData
 import com.tsunderebug.scolor.otf.tables.color.google.{OTFGoogleGlyphData, OTFGoogleSmallGlyphMetrics}
 import com.tsunderebug.scolor.otf.tables.color.svg.OTFSVGDocument
+import javax.imageio.ImageIO
 import org.w3c.dom.Document
 import spire.math.UByte
 

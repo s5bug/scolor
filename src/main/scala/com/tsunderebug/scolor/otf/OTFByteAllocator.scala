@@ -20,6 +20,12 @@ class OTFByteAllocator(f: OpenTypeFont) extends ByteAllocator {
     data.data(this).foreach(insert)
   }
 
+  def nextOffset: Offset = nextAvailableOffset
+
+  def allocate(data: Data, numBytes: UInt): Offset = {
+    allocMap.getOrElseUpdate(data, allocate(numBytes))
+  }
+
   def allocate(numBytes: UInt): Offset = {
     allocate(numBytes, UByte(1))
   }
@@ -31,17 +37,11 @@ class OTFByteAllocator(f: OpenTypeFont) extends ByteAllocator {
     prev
   }
 
-  def allocate(data: Data, numBytes: UInt): Offset = {
-    allocMap.getOrElseUpdate(data, allocate(numBytes))
-  }
-
   override def allocate(data: Data): Offset = {
     val allocation = super.allocate(data)
-//    println(s"Allocated 0x${allocation.position.toLong.toHexString.reverse.padTo(8, '0').reverse} with 0x${data.length(this).toLong.toHexString.reverse.padTo(4, '0').reverse} (0x${(allocation.position.toLong + data.length(this).toLong).toHexString.reverse.padTo(8, '0').reverse}) to $data")
+    //    println(s"Allocated 0x${allocation.position.toLong.toHexString.reverse.padTo(8, '0').reverse} with 0x${data.length(this).toLong.toHexString.reverse.padTo(4, '0').reverse} (0x${(allocation.position.toLong + data.length(this).toLong).toHexString.reverse.padTo(8, '0').reverse}) to $data")
     allocation
   }
-
-  def nextOffset: Offset = nextAvailableOffset
 
   def getBytes: Array[UByte] = {
     val m: Int = byteMap.map((t) => t._1.position.toInt).max
