@@ -1,12 +1,17 @@
 val batikVersion = settingKey[String]("Batik Version")
 val imageIOVersion = settingKey[String]("ImageIO Version")
 
-lazy val root = (project in file(".")).settings(
-  name := "Scolor",
-  version := "0.1",
-  scalaVersion := "2.12.5",
+lazy val commonSettings = Seq(
+  organization := "com.tsunderebug",
   batikVersion := "1.9.1",
-  imageIOVersion := "3.3.2",
+  imageIOVersion := "3.3.2"
+)
+
+lazy val core = (project in file(".")).settings(
+  commonSettings,
+  name := "scolor",
+  version := "0.1.0",
+  scalaVersion := "2.12.5",
   libraryDependencies ++= Seq(
     "org.typelevel" %% "spire" % "0.14.1",
     "org.apache.xmlgraphics" % "batik-svg-dom" % batikVersion.value,
