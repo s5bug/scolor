@@ -1,2 +1,1 @@
-# Scolor
-A Scala Library for dealing with OTF fonts, specifically for converting color emoji fonts between platforms.
+# This project has moved to GitLab. [srnb/scolor](https://gitlab.com/srnb/scolor)
